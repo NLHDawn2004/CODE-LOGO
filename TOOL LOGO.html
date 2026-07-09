@@ -1,0 +1,1615 @@
+\<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HD CODE LOGO</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      min-height: 100vh;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1250px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .note {
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .drop-zone {
+      border: 3px dashed #666;
+      border-radius: 20px;
+      padding: 50px 20px;
+      text-align: center;
+      background: #1d1d1d;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .drop-zone.dragover {
+      border-color: #00ff88;
+      background: #193326;
+    }
+
+    .drop-zone p {
+      font-size: 22px;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .drop-zone span {
+      display: block;
+      color: #aaa;
+      margin-top: 10px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .settings {
+      margin: 22px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      background: #191919;
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 14px;
+      color: #ddd;
+      font-weight: bold;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    input[type="range"],
+    select {
+      width: 100%;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background: #0f0f0f;
+      color: white;
+      padding: 11px;
+      outline: none;
+    }
+
+    input[type="range"] {
+      padding: 6px;
+    }
+
+    input[readonly] {
+      opacity: 0.75;
+    }
+
+    .help {
+      color: #aaa;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 25px 0;
+    }
+
+    button {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: #00c878;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #00ee8b;
+    }
+
+    button.secondary {
+      background: #333;
+      color: white;
+    }
+
+    button.secondary:hover {
+      background: #444;
+    }
+
+    button.danger {
+      background: #703333;
+      color: white;
+    }
+
+    button.danger:hover {
+      background: #8a3b3b;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    button.copy-done {
+      background: #ffd36a;
+      color: #000;
+    }
+
+    .summary {
+      text-align: center;
+      color: #ddd;
+      margin: 12px 0 20px;
+      min-height: 22px;
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 14px;
+      padding: 12px;
+      overflow: hidden;
+      cursor: grab;
+    }
+
+    .card:active {
+      cursor: grabbing;
+    }
+
+    .card.dragging {
+      opacity: 0.45;
+      border-color: #00ff88;
+    }
+
+    .card.drag-over {
+      outline: 2px dashed #00ff88;
+      outline-offset: 4px;
+    }
+
+    .preview {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: black;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: black;
+    }
+
+    .filename {
+      font-size: 13px;
+      color: #ddd;
+      margin: 10px 0 5px;
+      word-break: break-all;
+      font-weight: bold;
+    }
+
+    .info {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #263b31;
+      color: #00ff99;
+      font-size: 11px;
+      margin-top: 4px;
+      margin-right: 4px;
+    }
+
+    .badge.warn {
+      background: #3d3320;
+      color: #ffd36a;
+    }
+
+    .badge.cut {
+      background: #203849;
+      color: #83d9ff;
+    }
+
+    .card button {
+      width: 100%;
+      padding: 10px;
+      font-size: 13px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #888;
+      margin-top: 30px;
+    }
+
+    .table-box {
+      background: #191919;
+      border: 1px solid #333;
+      border-radius: 16px;
+      overflow: hidden;
+      position: sticky;
+      top: 16px;
+    }
+
+    .table-title {
+      padding: 14px;
+      background: #222;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+    }
+
+    .table-wrap {
+      max-height: 680px;
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #2f2f2f;
+      padding: 8px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #151515;
+      color: #00ff99;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tr.active-row {
+      background: #183526;
+    }
+
+    tr.missing-row {
+      opacity: 0.55;
+    }
+
+    .warning {
+      color: #ffd36a;
+    }
+
+    @media (max-width: 950px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .table-box {
+        position: static;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 16px;
+      }
+
+      .drop-zone {
+        padding: 35px 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Resize PNG + Đọc đúng tên file + Tách nền hàng loạt</h1>
+
+    <div class="note">
+      Web sẽ đọc <b>tên file ảnh mới vừa tải lên</b> để hiển thị đúng Team mới và gắn HEADPIC theo thứ tự/xử lý phù hợp.<br>
+      Có thêm chế độ <b>tách nền tự động hàng loạt</b>. Sau khi ảnh hiện ra, bạn có thể <b>ấn giữ chuột kéo thả card</b> để đổi team sang mã HEADPIC khác. Có thêm nút <b>KHÔNG TÁCH NỀN</b> để resize/chuyển PNG nhưng giữ nguyên nền ảnh.
+    </div>
+
+    <div class="drop-zone" id="dropZone">
+      <p>Kéo thả ảnh vào đây</p>
+      <span>Hoặc bấm để chọn nhiều ảnh. Sau khi xử lý, có thể ấn giữ chuột kéo thả các ô ảnh để đổi mã HEADPIC.</span>
+      <input type="file" id="fileInput" accept="image/*" multiple />
+    </div>
+
+    <div class="settings">
+      <div class="field">
+        <label for="sizeInput">Kích thước xuất</label>
+        <input type="number" id="sizeInput" value="1000" min="100" max="4000" step="50" />
+        <div class="help">Mặc định là 1000×1000 pixel.</div>
+      </div>
+
+      <div class="field">
+        <label for="removeBgSelect">Tách nền hàng loạt</label>
+        <select id="removeBgSelect">
+          <option value="off">Tắt tách nền</option>
+          <option value="auto" selected>Bật - tự động tách nền theo 4 góc ảnh</option>
+        </select>
+        <div class="help">Tốt nhất với nền trơn. Web sẽ nhận diện màu nền ở các góc và xóa vùng nền nối liền.</div>
+      </div>
+
+      <div class="field">
+        <label for="thresholdInput">Độ mạnh tách nền: <span id="thresholdValue">42</span></label>
+        <input type="range" id="thresholdInput" min="10" max="120" value="42" step="1" />
+        <div class="help">Tăng nếu còn viền/nền. Giảm nếu ảnh bị mất chi tiết.</div>
+      </div>
+
+      <div class="field">
+        <label for="featherInput">Làm mềm viền: <span id="featherValue">8</span></label>
+        <input type="range" id="featherInput" min="0" max="30" value="8" step="1" />
+        <div class="help">Giúp mép ảnh mượt hơn sau khi tách nền.</div>
+      </div>
+
+      <div class="field">
+        <label for="backgroundSelect">Nền sau khi xuất</label>
+        <select id="backgroundSelect">
+          <option value="transparent" selected>Trong suốt</option>
+          <option value="#000000">Nền đen</option>
+          <option value="#ffffff">Nền trắng</option>
+        </select>
+        <div class="help">Muốn tách nền thật sự thì để Trong suốt.</div>
+      </div>
+
+      <div class="field">
+        <label for="zipNameInput">Tên file nén</label>
+        <input type="text" id="zipNameInput" value="headpic_resize_png" />
+        <div class="help">File tải về là .zip và mở được bằng WinRAR.</div>
+      </div>
+
+      <div class="field">
+        <label>Kiểu đặt tên ảnh xuất ra</label>
+        <input type="text" value="HEADPIC.png" readonly />
+        <div class="help">Ví dụ: 902000006.png, 902000007.png, 902000008.png...</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="processBtn">TÁCH NỀN</button>
+      <button class="no-bg" id="processNoBgBtn">KHÔNG TÁCH NỀN</button>
+      <button id="downloadAllBtn">TẢI XUỐNG</button>
+      <button class="secondary" id="copyTeamsBtn">SAO CHÉP TÊN ĐỘI</button>
+      <button class="secondary" id="downloadEachBtn">Tải từng ảnh riêng lẻ</button>
+      <button class="secondary" id="resetAllBtn">Làm mới toàn bộ</button>
+      <button class="danger" id="clearBtn">Xóa danh sách</button>
+    </div>
+
+    <div class="summary" id="summaryText"></div>
+
+    <div class="layout">
+      <div>
+        <div class="grid" id="resultGrid"></div>
+        <div class="empty" id="emptyText">Chưa có ảnh nào.</div>
+      </div>
+
+      <div class="table-box">
+        <div class="table-title">Bảng Headpic đang dùng - đọc từ ảnh mới</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Tên ảnh / Team mới</th>
+                <th>Avatar</th>
+                <th>Headpic</th>
+              </tr>
+            </thead>
+            <tbody id="mappingTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const headpicData = [
+      { stt: 1, team: "AT BABY", avatar: "Andrew", headpic: "902000006" },
+      { stt: 2, team: "HUHU", avatar: "Kelly", headpic: "902000007" },
+      { stt: 3, team: "NQE", avatar: "Olivia", headpic: "902000008" },
+      { stt: 4, team: "RX", avatar: "Ford", headpic: "902000009" },
+      { stt: 5, team: "LKE", avatar: "Nikita", headpic: "902000010" },
+      { stt: 6, team: "LKA", avatar: "Misha", headpic: "902000012" },
+      { stt: 7, team: "JG", avatar: "Maxim", headpic: "902000030" },
+      { stt: 8, team: "RE", avatar: "Kla", headpic: "902000062" },
+      { stt: 9, team: "GTFF", avatar: "Paloma", headpic: "902000080" },
+      { stt: 10, team: "ADE", avatar: "Miguel", headpic: "902000081" },
+      { stt: 11, team: "HKE", avatar: "Caroline", headpic: "902000096" },
+      { stt: 12, team: "CTE", avatar: "Antonio", headpic: "902000102" },
+      { stt: 13, team: "FAPA", avatar: "Ngộ Không", headpic: "902000110" },
+      { stt: 14, team: "TTA", avatar: "Moco", headpic: "902000119" },
+      { stt: 15, team: "15", avatar: "Hayato", headpic: "902000130" },
+      { stt: 16, team: "", avatar: "Laura", headpic: "902000167" },
+      { stt: 17, team: "", avatar: "Rafel", headpic: "902000182" },
+      { stt: 18, team: "", avatar: "A124", headpic: "902000201" },
+      { stt: 19, team: "", avatar: "Joseph", headpic: "902000202" },
+      { stt: 20, team: "", avatar: "Shani", headpic: "902000219" },
+      { stt: 21, team: "", avatar: "Alok", headpic: "902000220" },
+      { stt: 22, team: "", avatar: "Notora", headpic: "902000239" },
+      { stt: 23, team: "", avatar: "Alvaro", headpic: "902000240" },
+      { stt: 24, team: "", avatar: "Jota", headpic: "902000278" }
+    ];
+
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
+    const resultGrid = document.getElementById("resultGrid");
+    const emptyText = document.getElementById("emptyText");
+    const summaryText = document.getElementById("summaryText");
+    const mappingTable = document.getElementById("mappingTable");
+
+    const processBtn = document.getElementById("processBtn");
+    const processNoBgBtn = document.getElementById("processNoBgBtn");
+    const downloadAllBtn = document.getElementById("downloadAllBtn");
+    const copyTeamsBtn = document.getElementById("copyTeamsBtn");
+    const downloadEachBtn = document.getElementById("downloadEachBtn");
+    const resetAllBtn = document.getElementById("resetAllBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const sizeInput = document.getElementById("sizeInput");
+    const removeBgSelect = document.getElementById("removeBgSelect");
+    const thresholdInput = document.getElementById("thresholdInput");
+    const featherInput = document.getElementById("featherInput");
+    const thresholdValue = document.getElementById("thresholdValue");
+    const featherValue = document.getElementById("featherValue");
+    const backgroundSelect = document.getElementById("backgroundSelect");
+    const zipNameInput = document.getElementById("zipNameInput");
+
+    let sourceItems = [];
+    let processedImages = [];
+    let draggedCardIndex = null;
+
+    renderMappingTable();
+
+    thresholdInput.addEventListener("input", () => {
+      thresholdValue.textContent = thresholdInput.value;
+    });
+
+    featherInput.addEventListener("input", () => {
+      featherValue.textContent = featherInput.value;
+    });
+
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", (e) => {
+      addFiles(e.target.files);
+      fileInput.value = "";
+    });
+
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("dragover");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("dragover");
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+      addFiles(e.dataTransfer.files);
+    });
+
+    processBtn.addEventListener("click", async () => {
+      if (sourceItems.length === 0) {
+        alert("Bạn chưa chọn ảnh.");
+        return;
+      }
+
+      await processAllImages(true);
+    });
+
+    processNoBgBtn.addEventListener("click", async () => {
+      if (sourceItems.length === 0) {
+        alert("Bạn chưa chọn ảnh.");
+        return;
+      }
+
+      await processAllImages(false);
+    });
+
+    downloadAllBtn.addEventListener("click", async () => {
+      if (sourceItems.length === 0 && processedImages.length === 0) {
+        alert("Bạn chưa chọn ảnh.");
+        return;
+      }
+
+      if (processedImages.length === 0) {
+        await processAllImages();
+      }
+
+      await downloadZip();
+    });
+
+    copyTeamsBtn.addEventListener("click", async () => {
+      const teamNames = (sourceItems.length > 0
+        ? sourceItems.map(item => item.displayTeam || getDisplayTeamFromFileName(item.file.name, item.data))
+        : headpicData.map(row => cleanNamePart(row.team || ""))
+      )
+        .filter(team => team.length > 0)
+        .join("\n");
+
+      if (!teamNames) {
+        alert("Không có tên team nào để sao chép.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(teamNames);
+      } catch (error) {
+        copyTextFallback(teamNames);
+      }
+
+      const oldText = copyTeamsBtn.textContent;
+      copyTeamsBtn.textContent = "Đã sao chép tên team!";
+      copyTeamsBtn.classList.add("copy-done");
+
+      summaryText.innerHTML =
+        "Đã sao chép <b>" +
+        teamNames.split("\n").length +
+        "</b> tên team theo đúng thứ tự STT.";
+
+      setTimeout(() => {
+        copyTeamsBtn.textContent = oldText;
+        copyTeamsBtn.classList.remove("copy-done");
+      }, 1800);
+    });
+
+    downloadEachBtn.addEventListener("click", () => {
+      if (processedImages.length === 0) {
+        alert("Bạn cần bấm Resize, tách nền & chuyển PNG trước.");
+        return;
+      }
+
+      processedImages.forEach((item, index) => {
+        setTimeout(() => {
+          downloadFile(item.url, item.outputName);
+        }, index * 250);
+      });
+    });
+
+    resetAllBtn.addEventListener("click", () => {
+      const ok = confirm("Bạn có chắc muốn làm mới toàn bộ và xóa hết tất cả dữ liệu không?");
+      if (!ok) return;
+
+      resetEverything();
+    });
+
+    clearBtn.addEventListener("click", () => {
+      resetEverything();
+    });
+
+    function resetEverything() {
+      clearProcessedUrls();
+
+      sourceItems = [];
+      processedImages = [];
+      draggedCardIndex = null;
+
+      resultGrid.innerHTML = "";
+      summaryText.textContent = "";
+      fileInput.value = "";
+
+      // Đưa toàn bộ tùy chọn về mặc định.
+      sizeInput.value = "1000";
+      removeBgSelect.value = "auto";
+      thresholdInput.value = "42";
+      featherInput.value = "8";
+      thresholdValue.textContent = "42";
+      featherValue.textContent = "8";
+      backgroundSelect.value = "transparent";
+      zipNameInput.value = "headpic_resize_png";
+
+      updateEmptyText();
+
+      // Xóa luôn toàn bộ dữ liệu đang hiển thị ở bảng Headpic đang dùng.
+      mappingTable.innerHTML = "";
+
+      summaryText.innerHTML = "Đã làm mới toàn bộ. Tất cả dữ liệu cũ đã được xóa.";
+    }
+
+    function addFiles(files) {
+      const imageFiles = Array.from(files).filter(file => file.type.startsWith("image/"));
+
+      if (imageFiles.length === 0) {
+        alert("Vui lòng chọn file ảnh.");
+        return;
+      }
+
+      const startIndex = sourceItems.length;
+
+      imageFiles.forEach((file, i) => {
+        const orderIndex = startIndex + i;
+        const match = findDataByFileName(file.name);
+        const fallbackData = headpicData[orderIndex] || null;
+
+        const dataForFile = match.data || fallbackData;
+
+        sourceItems.push({
+          file,
+          originalIndex: orderIndex,
+          data: dataForFile,
+          displayTeam: getDisplayTeamFromFileName(file.name, dataForFile),
+          matchType: match.data ? match.type : (fallbackData ? "order_fallback" : "unmatched")
+        });
+      });
+
+      sortSourceItemsByHeadpicOrder();
+
+      const matchedCount = sourceItems.filter(item => item.matchType !== "order_fallback" && item.matchType !== "unmatched").length;
+      const fallbackCount = sourceItems.filter(item => item.matchType === "order_fallback").length;
+      const unmatchedCount = sourceItems.filter(item => item.matchType === "unmatched").length;
+
+      let msg =
+        "Đã thêm " + sourceItems.length + " ảnh. Đọc đúng theo tên file được " +
+        matchedCount + " ảnh.";
+
+      if (fallbackCount > 0) {
+        msg += " Có " + fallbackCount + " ảnh chưa đọc được tên nên tạm dùng thứ tự.";
+      }
+
+      if (unmatchedCount > 0) {
+        msg += " Có " + unmatchedCount + " ảnh chưa có mapping.";
+      }
+
+      summaryText.textContent = msg;
+      updateEmptyText();
+      renderMappingTable();
+    }
+
+    function getDisplayTeamFromFileName(fileName, data) {
+      let name = String(fileName || "").replace(/\.[^/.]+$/, "");
+
+      // Xóa mã HEADPIC nếu tên file có chứa mã.
+      if (data && data.headpic) {
+        name = name.replace(new RegExp(data.headpic, "g"), "");
+      }
+
+      // Xóa đuôi số dài, STT đầu file, dấu phân cách thừa.
+      name = name
+        .replace(/\d{6,}/g, "")
+        .replace(/^\s*\d{1,3}[\s._-]+/, "")
+        .replace(/[._-]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      // Nếu tên bị rỗng, dùng lại tên file gốc không đuôi.
+      if (!name) {
+        name = String(fileName || "").replace(/\.[^/.]+$/, "").trim();
+      }
+
+      return cleanNamePart(name);
+    }
+
+    function sortSourceItemsByHeadpicOrder() {
+      sourceItems.sort((a, b) => {
+        const aOrder = a.data ? a.data.stt : 9999 + a.originalIndex;
+        const bOrder = b.data ? b.data.stt : 9999 + b.originalIndex;
+
+        if (aOrder !== bOrder) return aOrder - bOrder;
+        return a.originalIndex - b.originalIndex;
+      });
+    }
+
+    function findDataByFileName(fileName) {
+      const nameNoExt = String(fileName).replace(/\.[^/.]+$/, "");
+      const normalizedFileName = normalizeText(nameNoExt);
+      const digits = nameNoExt.match(/\d{6,}/g) || [];
+
+      // Ưu tiên 1: nếu tên file có mã HEADPIC thì khớp trực tiếp.
+      for (const row of headpicData) {
+        if (digits.includes(row.headpic)) {
+          return { data: row, type: "headpic" };
+        }
+      }
+
+      // Ưu tiên 2: nếu tên file là tên Avatar, ví dụ Kelly.png, Andrew.png, Ngộ Không.png.
+      for (const row of headpicData) {
+        if (normalizedFileName === normalizeText(row.avatar)) {
+          return { data: row, type: "avatar_exact" };
+        }
+      }
+
+      // Ưu tiên 3: nếu tên file có chứa tên Avatar, ví dụ 02_Kelly.png.
+      for (const row of headpicData) {
+        const avatar = normalizeText(row.avatar);
+        if (avatar && normalizedFileName.includes(avatar)) {
+          return { data: row, type: "avatar_contains" };
+        }
+      }
+
+      // Ưu tiên 4: nếu tên file có chứa tên Team.
+      for (const row of headpicData) {
+        const team = normalizeText(row.team);
+        if (team && normalizedFileName.includes(team)) {
+          return { data: row, type: "team_contains" };
+        }
+      }
+
+      return { data: null, type: "unmatched" };
+    }
+
+    async function processAllImages(forceRemoveBg = null) {
+      clearProcessedUrls();
+      processedImages = [];
+      resultGrid.innerHTML = "";
+
+      const size = clampNumber(parseInt(sizeInput.value, 10), 100, 4000, 1000);
+      const removeBg = forceRemoveBg === null
+        ? removeBgSelect.value === "auto"
+        : forceRemoveBg;
+      const threshold = clampNumber(parseInt(thresholdInput.value, 10), 10, 120, 42);
+      const feather = clampNumber(parseInt(featherInput.value, 10), 0, 30, 8);
+      const outputBackground = backgroundSelect.value;
+
+      processBtn.disabled = true;
+      processNoBgBtn.disabled = true;
+      downloadAllBtn.disabled = true;
+      processBtn.textContent = removeBg ? "Đang tách nền..." : "Đang xử lý không tách nền...";
+      processNoBgBtn.textContent = removeBg ? "KHÔNG TÁCH NỀN" : "Đang xử lý...";
+
+      try {
+        const usedNames = new Set();
+
+        for (let i = 0; i < sourceItems.length; i++) {
+          const itemSource = sourceItems[i];
+
+          summaryText.textContent =
+            "Đang xử lý " + (i + 1) + "/" + sourceItems.length +
+            ": " + itemSource.file.name;
+
+          const item = await processImageToPng(
+            itemSource.file,
+            size,
+            removeBg,
+            threshold,
+            feather,
+            outputBackground,
+            i,
+            itemSource.data,
+            itemSource.matchType,
+            itemSource.displayTeam,
+            usedNames
+          );
+
+          processedImages.push(item);
+          addCard(item, processedImages.length - 1);
+        }
+
+        updateSummary();
+        updateEmptyText();
+        renderMappingTable();
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        processBtn.disabled = false;
+        processNoBgBtn.disabled = false;
+        downloadAllBtn.disabled = false;
+        processBtn.textContent = "Resize, tách nền & chuyển PNG";
+        processNoBgBtn.textContent = "KHÔNG TÁCH NỀN";
+      }
+    }
+
+    function processImageToPng(file, size, removeBg, threshold, feather, outputBackground, index, data, matchType, displayTeam, usedNames) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+          const img = new Image();
+
+          img.onload = function() {
+            const workingCanvas = document.createElement("canvas");
+            workingCanvas.width = img.width;
+            workingCanvas.height = img.height;
+
+            const workingCtx = workingCanvas.getContext("2d", { willReadFrequently: true });
+            workingCtx.drawImage(img, 0, 0);
+
+            let removedPixelCount = 0;
+
+            if (removeBg) {
+              removedPixelCount = removeBackgroundFromCanvas(workingCanvas, threshold, feather);
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = size;
+            canvas.height = size;
+
+            const ctx = canvas.getContext("2d");
+
+            if (outputBackground === "transparent") {
+              ctx.clearRect(0, 0, size, size);
+            } else {
+              ctx.fillStyle = outputBackground;
+              ctx.fillRect(0, 0, size, size);
+            }
+
+            const scale = Math.min(size / workingCanvas.width, size / workingCanvas.height);
+            const newWidth = workingCanvas.width * scale;
+            const newHeight = workingCanvas.height * scale;
+            const x = (size - newWidth) / 2;
+            const y = (size - newHeight) / 2;
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(workingCanvas, x, y, newWidth, newHeight);
+
+            canvas.toBlob(function(blob) {
+              if (!blob) {
+                reject(new Error("Không thể xử lý ảnh: " + file.name));
+                return;
+              }
+
+              const url = URL.createObjectURL(blob);
+              const outputName = makeOutputName(file.name, index, data, usedNames);
+
+              resolve({
+                originalName: file.name,
+                outputName,
+                originalSize: file.size,
+                outputSize: blob.size,
+                size,
+                url,
+                blob,
+                data,
+                matchType,
+                displayTeam,
+                removeBg,
+                removedPixelCount
+              });
+            }, "image/png");
+          };
+
+          img.onerror = () => reject(new Error("Không thể đọc ảnh: " + file.name));
+          img.src = event.target.result;
+        };
+
+        reader.onerror = () => reject(new Error("Không thể đọc file: " + file.name));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function removeBackgroundFromCanvas(canvas, threshold, feather) {
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      const width = canvas.width;
+      const height = canvas.height;
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const data = imageData.data;
+      const bgSamples = getBackgroundSamples(data, width, height);
+      const visited = new Uint8Array(width * height);
+      const removeMask = new Uint8Array(width * height);
+      const queue = [];
+
+      addSeed(0, 0);
+      addSeed(width - 1, 0);
+      addSeed(0, height - 1);
+      addSeed(width - 1, height - 1);
+
+      const stepX = Math.max(1, Math.floor(width / 24));
+      const stepY = Math.max(1, Math.floor(height / 24));
+
+      for (let x = 0; x < width; x += stepX) {
+        addSeed(x, 0);
+        addSeed(x, height - 1);
+      }
+
+      for (let y = 0; y < height; y += stepY) {
+        addSeed(0, y);
+        addSeed(width - 1, y);
+      }
+
+      let head = 0;
+      let removed = 0;
+
+      while (head < queue.length) {
+        const index = queue[head++];
+        const x = index % width;
+        const y = Math.floor(index / width);
+
+        if (!isBackgroundPixel(data, index, bgSamples, threshold)) continue;
+
+        removeMask[index] = 1;
+        removed++;
+
+        if (x > 0) visit(index - 1);
+        if (x < width - 1) visit(index + 1);
+        if (y > 0) visit(index - width);
+        if (y < height - 1) visit(index + width);
+      }
+
+      for (let i = 0; i < removeMask.length; i++) {
+        if (removeMask[i]) data[i * 4 + 3] = 0;
+      }
+
+      if (feather > 0) {
+        softenEdges(data, width, height, removeMask, feather);
+      }
+
+      decontaminateEdges(data, width, height, bgSamples, removeMask);
+      ctx.putImageData(imageData, 0, 0);
+      return removed;
+
+      function addSeed(x, y) {
+        visit(y * width + x);
+      }
+
+      function visit(idx) {
+        if (idx < 0 || idx >= visited.length) return;
+        if (visited[idx]) return;
+        visited[idx] = 1;
+        queue.push(idx);
+      }
+    }
+
+    function getBackgroundSamples(data, width, height) {
+      const points = [
+        [0, 0],
+        [width - 1, 0],
+        [0, height - 1],
+        [width - 1, height - 1],
+        [Math.floor(width / 2), 0],
+        [Math.floor(width / 2), height - 1],
+        [0, Math.floor(height / 2)],
+        [width - 1, Math.floor(height / 2)]
+      ];
+
+      return points.map(([x, y]) => {
+        const i = (y * width + x) * 4;
+        return [data[i], data[i + 1], data[i + 2]];
+      });
+    }
+
+    function isBackgroundPixel(data, index, samples, threshold) {
+      const i = index * 4;
+      const a = data[i + 3];
+      if (a < 10) return true;
+
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      for (const sample of samples) {
+        if (colorDistance(r, g, b, sample[0], sample[1], sample[2]) <= threshold) return true;
+      }
+
+      return false;
+    }
+
+    function colorDistance(r1, g1, b1, r2, g2, b2) {
+      const dr = r1 - r2;
+      const dg = g1 - g2;
+      const db = b1 - b2;
+      return Math.sqrt(dr * dr + dg * dg + db * db);
+    }
+
+    function softenEdges(data, width, height, removeMask, feather) {
+      const radius = Math.min(feather, 30);
+      if (radius <= 0) return;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const idx = y * width + x;
+          if (removeMask[idx]) continue;
+
+          let nearest = radius + 1;
+
+          for (let dy = -radius; dy <= radius; dy++) {
+            const yy = y + dy;
+            if (yy < 0 || yy >= height) continue;
+
+            for (let dx = -radius; dx <= radius; dx++) {
+              const xx = x + dx;
+              if (xx < 0 || xx >= width) continue;
+
+              const nIdx = yy * width + xx;
+              if (!removeMask[nIdx]) continue;
+
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < nearest) nearest = dist;
+            }
+          }
+
+          if (nearest <= radius) {
+            const alphaIndex = idx * 4 + 3;
+            const keep = Math.min(1, nearest / radius);
+            const minAlpha = 0.25;
+            data[alphaIndex] = Math.round(data[alphaIndex] * Math.max(minAlpha, keep));
+          }
+        }
+      }
+    }
+
+    function decontaminateEdges(data, width, height, bgSamples, removeMask) {
+      const bg = averageColor(bgSamples);
+      const total = width * height;
+
+      for (let idx = 0; idx < total; idx++) {
+        if (removeMask[idx]) continue;
+
+        const alpha = data[idx * 4 + 3];
+        if (alpha === 255) continue;
+
+        const i = idx * 4;
+        const mix = (255 - alpha) / 255;
+        const keep = Math.max(0.15, 1 - mix);
+
+        data[i] = clampByte((data[i] - bg[0] * mix) / keep);
+        data[i + 1] = clampByte((data[i + 1] - bg[1] * mix) / keep);
+        data[i + 2] = clampByte((data[i + 2] - bg[2] * mix) / keep);
+      }
+    }
+
+    function averageColor(samples) {
+      const sum = [0, 0, 0];
+      for (const s of samples) {
+        sum[0] += s[0];
+        sum[1] += s[1];
+        sum[2] += s[2];
+      }
+      return [sum[0] / samples.length, sum[1] / samples.length, sum[2] / samples.length];
+    }
+
+    function clampByte(value) {
+      return Math.max(0, Math.min(255, Math.round(value)));
+    }
+
+    function makeOutputName(originalName, index, data, usedNames) {
+      let baseName = "";
+
+      if (data) {
+        baseName = cleanNamePart(data.headpic || "");
+      } else {
+        baseName = originalName.replace(/\.[^/.]+$/, "").trim() || ("image_" + (index + 1));
+      }
+
+      baseName = sanitizeFileName(baseName);
+
+      let finalName = baseName + ".png";
+      let count = 2;
+
+      while (usedNames.has(finalName.toLowerCase())) {
+        finalName = baseName + "_" + count + ".png";
+        count++;
+      }
+
+      usedNames.add(finalName.toLowerCase());
+      return finalName;
+    }
+
+    function addCard(item, index) {
+      const data = item.data;
+      const card = document.createElement("div");
+      card.className = "card";
+      card.draggable = true;
+      card.dataset.index = String(index);
+
+      const matchLabel = getMatchLabel(item.matchType);
+
+      const mappingInfo = data
+        ? `
+          File gốc: ${escapeHtml(item.originalName)}<br>
+          Đọc tên file: ${matchLabel}<br>
+          STT hiện tại: ${index + 1}<br>
+          Tên ảnh / Team mới: ${escapeHtml(item.displayTeam || getDisplayTeamFromFileName(item.originalName, data) || "-")}<br>
+          Avatar: ${escapeHtml(data.avatar || "-")}<br>
+          Headpic xuất ra: ${escapeHtml(data.headpic)}<br>
+        `
+        : `
+          File gốc: ${escapeHtml(item.originalName)}<br>
+          <span class="warning">Không đọc được mapping, dùng tên gốc.</span><br>
+        `;
+
+      card.innerHTML = `
+        <div class="preview">
+          <img src="${item.url}" alt="${escapeHtml(item.outputName)}">
+        </div>
+        <div class="filename">${escapeHtml(item.outputName)}</div>
+        <div class="info">
+          ${mappingInfo}
+          Tách nền: ${item.removeBg ? "Bật" : "Tắt"}<br>
+          Gốc: ${formatBytes(item.originalSize)}<br>
+          PNG: ${formatBytes(item.outputSize)}<br>
+          Size: ${item.size}×${item.size}<br>
+          <span class="badge">PNG</span>
+          ${item.removeBg ? '<span class="badge cut">Đã tách nền</span>' : ''}
+          ${item.matchType === "manual_drag" ? '<span class="badge cut">Đã kéo đổi mã</span>' : ''}
+          ${item.matchType === "order_fallback" || item.matchType === "unmatched" ? '<span class="badge warn">Cần kiểm tra</span>' : ''}
+        </div>
+        <button type="button">Tải ảnh này</button>
+      `;
+
+      const btn = card.querySelector("button");
+      btn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        downloadFile(item.url, item.outputName);
+      });
+
+      card.addEventListener("dragstart", (event) => {
+        draggedCardIndex = Number(card.dataset.index);
+        card.classList.add("dragging");
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", String(draggedCardIndex));
+      });
+
+      card.addEventListener("dragend", () => {
+        draggedCardIndex = null;
+        document.querySelectorAll(".card").forEach(el => {
+          el.classList.remove("dragging", "drag-over");
+        });
+      });
+
+      card.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        card.classList.add("drag-over");
+      });
+
+      card.addEventListener("dragleave", () => {
+        card.classList.remove("drag-over");
+      });
+
+      card.addEventListener("drop", (event) => {
+        event.preventDefault();
+        card.classList.remove("drag-over");
+
+        const fromIndex = draggedCardIndex;
+        const toIndex = Number(card.dataset.index);
+
+        if (Number.isNaN(fromIndex) || Number.isNaN(toIndex)) return;
+        if (fromIndex === toIndex) return;
+
+        moveCardToNewHeadpic(fromIndex, toIndex);
+      });
+
+      resultGrid.appendChild(card);
+    }
+
+    function getMatchLabel(type) {
+      if (type === "headpic") return "Khớp mã HEADPIC trong tên file";
+      if (type === "avatar_exact") return "Khớp chính xác tên Avatar";
+      if (type === "avatar_contains") return "Tên file có chứa Avatar";
+      if (type === "team_contains") return "Tên file có chứa Team";
+      if (type === "manual_drag") return "Đã kéo thả để đổi mã HEADPIC";
+      if (type === "order_fallback") return "<span class='warning'>Không khớp tên, tạm dùng thứ tự</span>";
+      return "<span class='warning'>Không khớp</span>";
+    }
+
+    function moveCardToNewHeadpic(fromIndex, toIndex) {
+      if (fromIndex < 0 || toIndex < 0) return;
+      if (fromIndex >= processedImages.length || toIndex >= processedImages.length) return;
+
+      const movedProcessed = processedImages.splice(fromIndex, 1)[0];
+      processedImages.splice(toIndex, 0, movedProcessed);
+
+      if (sourceItems.length === processedImages.length) {
+        const movedSource = sourceItems.splice(fromIndex, 1)[0];
+        sourceItems.splice(toIndex, 0, movedSource);
+      }
+
+      reassignHeadpicsByCurrentOrder();
+      rerenderProcessedCards();
+
+      summaryText.innerHTML =
+        "Đã đổi vị trí. Ảnh ở dòng <b>" +
+        (toIndex + 1) +
+        "</b> sẽ dùng mã <b>" +
+        escapeHtml(processedImages[toIndex].outputName) +
+        "</b>. Khi tải ZIP, tên file sẽ theo thứ tự mới.";
+    }
+
+    function reassignHeadpicsByCurrentOrder() {
+      const usedNames = new Set();
+
+      processedImages.forEach((item, index) => {
+        const newData = headpicData[index] || null;
+
+        if (newData) {
+          item.data = newData;
+          item.outputName = makeOutputName(item.originalName, index, newData, usedNames);
+          item.matchType = "manual_drag";
+        } else {
+          item.data = null;
+          item.outputName = makeOutputName(item.originalName, index, null, usedNames);
+          item.matchType = "unmatched";
+        }
+      });
+
+      sourceItems.forEach((item, index) => {
+        const newData = headpicData[index] || null;
+        item.data = newData;
+        item.matchType = newData ? "manual_drag" : "unmatched";
+      });
+    }
+
+    function rerenderProcessedCards() {
+      resultGrid.innerHTML = "";
+
+      processedImages.forEach((item, index) => {
+        addCard(item, index);
+      });
+
+      renderMappingTable();
+    }
+
+    async function downloadZip() {
+      if (processedImages.length === 0) {
+        alert("Chưa có ảnh đã xử lý.");
+        return;
+      }
+
+      downloadAllBtn.disabled = true;
+      downloadAllBtn.textContent = "Đang tạo file nén...";
+      summaryText.textContent = "Đang đóng gói " + processedImages.length + " ảnh PNG vào file nén...";
+
+      try {
+        const files = processedImages.map(item => ({
+          name: item.outputName,
+          blob: item.blob
+        }));
+
+        const zipBlob = await createZip(files);
+        const zipUrl = URL.createObjectURL(zipBlob);
+        const zipName = sanitizeZipName(zipNameInput.value || "headpic_resize_png") + ".zip";
+
+        downloadFile(zipUrl, zipName);
+
+        setTimeout(() => URL.revokeObjectURL(zipUrl), 10000);
+
+        summaryText.innerHTML =
+          "Đã tạo xong file nén <b>" +
+          escapeHtml(zipName) +
+          "</b> chứa <b>" +
+          processedImages.length +
+          "</b> ảnh PNG. File này mở được bằng WinRAR.";
+      } catch (error) {
+        alert("Không thể tạo file nén: " + error.message);
+      } finally {
+        downloadAllBtn.disabled = false;
+        downloadAllBtn.textContent = "TẢI XUỐNG";
+      }
+    }
+
+    async function createZip(files) {
+      const encoder = new TextEncoder();
+      const localParts = [];
+      const centralParts = [];
+      let offset = 0;
+
+      for (const file of files) {
+        const safeName = sanitizeFileName(file.name);
+        const nameBytes = encoder.encode(safeName);
+        const data = new Uint8Array(await file.blob.arrayBuffer());
+        const crc = crc32(data);
+        const size = data.length;
+        const timeDate = getDosDateTime(new Date());
+
+        const localHeader = new Uint8Array(30 + nameBytes.length);
+        const localView = new DataView(localHeader.buffer);
+
+        localView.setUint32(0, 0x04034b50, true);
+        localView.setUint16(4, 20, true);
+        localView.setUint16(6, 0x0800, true);
+        localView.setUint16(8, 0, true);
+        localView.setUint16(10, timeDate.time, true);
+        localView.setUint16(12, timeDate.date, true);
+        localView.setUint32(14, crc, true);
+        localView.setUint32(18, size, true);
+        localView.setUint32(22, size, true);
+        localView.setUint16(26, nameBytes.length, true);
+        localView.setUint16(28, 0, true);
+        localHeader.set(nameBytes, 30);
+
+        localParts.push(localHeader, data);
+
+        const centralHeader = new Uint8Array(46 + nameBytes.length);
+        const centralView = new DataView(centralHeader.buffer);
+
+        centralView.setUint32(0, 0x02014b50, true);
+        centralView.setUint16(4, 20, true);
+        centralView.setUint16(6, 20, true);
+        centralView.setUint16(8, 0x0800, true);
+        centralView.setUint16(10, 0, true);
+        centralView.setUint16(12, timeDate.time, true);
+        centralView.setUint16(14, timeDate.date, true);
+        centralView.setUint32(16, crc, true);
+        centralView.setUint32(20, size, true);
+        centralView.setUint32(24, size, true);
+        centralView.setUint16(28, nameBytes.length, true);
+        centralView.setUint16(30, 0, true);
+        centralView.setUint16(32, 0, true);
+        centralView.setUint16(34, 0, true);
+        centralView.setUint16(36, 0, true);
+        centralView.setUint32(38, 0, true);
+        centralView.setUint32(42, offset, true);
+        centralHeader.set(nameBytes, 46);
+
+        centralParts.push(centralHeader);
+        offset += localHeader.length + data.length;
+      }
+
+      const centralOffset = offset;
+      const centralSize = centralParts.reduce((sum, part) => sum + part.length, 0);
+
+      const endHeader = new Uint8Array(22);
+      const endView = new DataView(endHeader.buffer);
+
+      endView.setUint32(0, 0x06054b50, true);
+      endView.setUint16(4, 0, true);
+      endView.setUint16(6, 0, true);
+      endView.setUint16(8, files.length, true);
+      endView.setUint16(10, files.length, true);
+      endView.setUint32(12, centralSize, true);
+      endView.setUint32(16, centralOffset, true);
+      endView.setUint16(20, 0, true);
+
+      return new Blob([...localParts, ...centralParts, endHeader], {
+        type: "application/zip"
+      });
+    }
+
+    const crcTable = (() => {
+      const table = new Uint32Array(256);
+
+      for (let i = 0; i < 256; i++) {
+        let c = i;
+
+        for (let k = 0; k < 8; k++) {
+          c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+        }
+
+        table[i] = c >>> 0;
+      }
+
+      return table;
+    })();
+
+    function crc32(data) {
+      let crc = 0xffffffff;
+
+      for (let i = 0; i < data.length; i++) {
+        crc = crcTable[(crc ^ data[i]) & 0xff] ^ (crc >>> 8);
+      }
+
+      return (crc ^ 0xffffffff) >>> 0;
+    }
+
+    function getDosDateTime(date) {
+      const year = Math.max(1980, date.getFullYear());
+
+      const dosTime =
+        (date.getHours() << 11) |
+        (date.getMinutes() << 5) |
+        Math.floor(date.getSeconds() / 2);
+
+      const dosDate =
+        ((year - 1980) << 9) |
+        ((date.getMonth() + 1) << 5) |
+        date.getDate();
+
+      return {
+        time: dosTime,
+        date: dosDate
+      };
+    }
+
+    function renderMappingTable() {
+      mappingTable.innerHTML = "";
+
+      // Quan trọng:
+      // Bảng này KHÔNG còn hiển thị team cũ cố định trong code nữa.
+      // Nó sẽ đọc tên ảnh/team từ chính các file mới bạn vừa tải lên.
+      if (sourceItems.length === 0) {
+        return;
+      }
+
+      sourceItems.forEach((item, index) => {
+        const tr = document.createElement("tr");
+        tr.classList.add("active-row");
+
+        const data = item.data;
+        const displayTeam = item.displayTeam || getDisplayTeamFromFileName(item.file.name, data);
+
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${escapeHtml(displayTeam || "-")}</td>
+          <td>${data ? escapeHtml(data.avatar || "-") : "-"}</td>
+          <td>${data ? escapeHtml(data.headpic || "-") : "-"}</td>
+        `;
+
+        mappingTable.appendChild(tr);
+      });
+    }
+
+    function updateSummary() {
+      const totalOriginal = processedImages.reduce((sum, item) => sum + item.originalSize, 0);
+      const totalOutput = processedImages.reduce((sum, item) => sum + item.outputSize, 0);
+      const exactCount = processedImages.filter(item => item.matchType !== "order_fallback" && item.matchType !== "unmatched").length;
+      const fallbackCount = processedImages.filter(item => item.matchType === "order_fallback").length;
+      const unmatchedCount = processedImages.filter(item => item.matchType === "unmatched").length;
+      const cutCount = processedImages.filter(item => item.removeBg).length;
+
+      let extra =
+        " Đọc đúng theo tên file: <b>" + exactCount + "</b> ảnh.";
+
+      if (cutCount > 0) {
+        extra += " Đã bật tách nền: <b>" + cutCount + "</b> ảnh.";
+      }
+
+      if (fallbackCount > 0) {
+        extra += " <span class='warning'>Tạm dùng thứ tự: " + fallbackCount + " ảnh.</span>";
+      }
+
+      if (unmatchedCount > 0) {
+        extra += " <span class='warning'>Không khớp mapping: " + unmatchedCount + " ảnh.</span>";
+      }
+
+      summaryText.innerHTML =
+        "Hoàn tất <b>" +
+        processedImages.length +
+        "</b> ảnh. Dung lượng gốc: <b>" +
+        formatBytes(totalOriginal) +
+        "</b>. Sau khi xuất PNG: <b>" +
+        formatBytes(totalOutput) +
+        "</b>." +
+        extra;
+    }
+
+    function updateEmptyText() {
+      if (sourceItems.length === 0 && processedImages.length === 0) {
+        emptyText.style.display = "block";
+        emptyText.textContent = "Chưa có ảnh nào.";
+      } else if (sourceItems.length > 0 && processedImages.length === 0) {
+        emptyText.style.display = "block";
+        emptyText.textContent = "Đã có ảnh chờ xử lý. Bấm Resize, tách nền & chuyển PNG hoặc KHÔNG TÁCH NỀN.";
+      } else {
+        emptyText.style.display = "none";
+      }
+    }
+
+    function clearProcessedUrls() {
+      processedImages.forEach(item => URL.revokeObjectURL(item.url));
+    }
+
+    function clampNumber(value, min, max, fallback) {
+      if (Number.isNaN(value)) return fallback;
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function cleanNamePart(text) {
+      return String(text || "")
+        .replace(/'/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function normalizeText(text) {
+      return cleanNamePart(text)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/đ/g, "d")
+        .replace(/[^a-z0-9]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function sanitizeFileName(name) {
+      return String(name)
+        .normalize("NFC")
+        .replace(/[\\/:*?"<>|]/g, "_")
+        .replace(/\s+/g, "_")
+        .replace(/_+/g, "_")
+        .trim()
+        .replace(/^_+|_+$/g, "");
+    }
+
+    function sanitizeZipName(name) {
+      return String(name)
+        .replace(/[\\/:*?"<>|]/g, "_")
+        .replace(/\s+/g, "_")
+        .replace(/_+/g, "_")
+        .trim()
+        .replace(/\.zip$/i, "") || "headpic_resize_png";
+    }
+
+    function copyTextFallback(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      textarea.style.top = "-9999px";
+
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+
+    function downloadFile(url, filename) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return "0 B";
+
+      const units = ["B", "KB", "MB", "GB"];
+      const index = Math.floor(Math.log(bytes) / Math.log(1024));
+      const value = bytes / Math.pow(1024, index);
+
+      return value.toFixed(value >= 10 ? 1 : 2) + " " + units[index];
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+</body>
+</html>
