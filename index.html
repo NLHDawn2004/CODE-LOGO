@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HD CODE LOGO</title>
-
   <style>
     * {
       box-sizing: border-box;
@@ -13,54 +12,54 @@
 
     body {
       margin: 0;
-      background: #111;
-      color: white;
       min-height: 100vh;
       padding: 30px;
+      background: #0d0f10;
+      color: #fff;
     }
 
     .container {
-      max-width: 1250px;
-      margin: auto;
+      max-width: 1280px;
+      margin: 0 auto;
     }
 
     h1 {
+      margin: 0 0 10px;
       text-align: center;
-      margin-bottom: 10px;
     }
 
     .note {
-      text-align: center;
-      color: #ccc;
       margin-bottom: 25px;
-      line-height: 1.6;
+      color: #c7cdcf;
+      text-align: center;
+      line-height: 1.65;
     }
 
     .drop-zone {
-      border: 3px dashed #666;
+      padding: 48px 20px;
+      border: 3px dashed #596064;
       border-radius: 20px;
-      padding: 50px 20px;
+      background: #181b1d;
       text-align: center;
-      background: #1d1d1d;
       cursor: pointer;
       transition: 0.2s;
     }
 
     .drop-zone.dragover {
-      border-color: #00ff88;
-      background: #193326;
+      border-color: #19b89f;
+      background: #102824;
     }
 
     .drop-zone p {
-      font-size: 22px;
       margin: 0;
-      font-weight: bold;
+      font-size: 22px;
+      font-weight: 700;
     }
 
     .drop-zone span {
       display: block;
-      color: #aaa;
       margin-top: 10px;
+      color: #9da5a8;
     }
 
     input[type="file"] {
@@ -68,14 +67,14 @@
     }
 
     .settings {
-      margin: 22px 0;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 14px;
-      background: #191919;
-      border: 1px solid #333;
-      border-radius: 16px;
+      margin: 22px 0;
       padding: 18px;
+      border: 1px solid #303538;
+      border-radius: 16px;
+      background: #17191b;
     }
 
     .field {
@@ -85,26 +84,26 @@
     }
 
     .field label {
+      color: #d9dfe0;
       font-size: 14px;
-      color: #ddd;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     input[type="number"],
     input[type="text"],
-    input[type="range"],
     select {
       width: 100%;
-      border: 1px solid #444;
-      border-radius: 10px;
-      background: #0f0f0f;
-      color: white;
       padding: 11px;
+      border: 1px solid #404649;
+      border-radius: 10px;
       outline: none;
+      background: #0e1011;
+      color: #fff;
     }
 
     input[type="range"] {
-      padding: 6px;
+      width: 100%;
+      accent-color: #178e7e;
     }
 
     input[readonly] {
@@ -112,50 +111,50 @@
     }
 
     .help {
-      color: #aaa;
+      color: #8e979a;
       font-size: 12px;
       line-height: 1.4;
     }
 
     .controls {
       display: flex;
-      gap: 12px;
       flex-wrap: wrap;
       justify-content: center;
+      gap: 12px;
       margin: 25px 0;
     }
 
     button {
-      border: none;
       padding: 12px 18px;
+      border: 0;
       border-radius: 10px;
-      background: #00c878;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
+      background: #16a98f;
+      color: #04100e;
       font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     button:hover {
-      background: #00ee8b;
+      background: #23c1a5;
     }
 
     button.secondary {
-      background: #333;
-      color: white;
+      background: #303437;
+      color: #fff;
     }
 
     button.secondary:hover {
-      background: #444;
+      background: #3b4043;
     }
 
     button.danger {
-      background: #703333;
-      color: white;
+      background: #743841;
+      color: #fff;
     }
 
     button.danger:hover {
-      background: #8a3b3b;
+      background: #8b414b;
     }
 
     button:disabled {
@@ -164,15 +163,15 @@
     }
 
     button.copy-done {
-      background: #ffd36a;
-      color: #000;
+      background: #e3c16b;
+      color: #111;
     }
 
     .summary {
-      text-align: center;
-      color: #ddd;
-      margin: 12px 0 20px;
       min-height: 22px;
+      margin: 12px 0 20px;
+      color: #cbd0d2;
+      text-align: center;
       line-height: 1.5;
     }
 
@@ -185,16 +184,16 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
       gap: 18px;
     }
 
     .card {
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 14px;
-      padding: 12px;
       overflow: hidden;
+      padding: 12px;
+      border: 1px solid #303538;
+      border-radius: 14px;
+      background: #1a1d1f;
       cursor: grab;
     }
 
@@ -204,56 +203,191 @@
 
     .card.dragging {
       opacity: 0.45;
-      border-color: #00ff88;
+      border-color: #1dc8aa;
     }
 
     .card.drag-over {
-      outline: 2px dashed #00ff88;
+      outline: 2px dashed #1dc8aa;
       outline-offset: 4px;
     }
 
-    .preview {
+    .preview-shell {
+      position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
-      background: black;
-      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #343a3d;
+      border-radius: 12px;
+      background:
+        linear-gradient(45deg, #16191a 25%, transparent 25%),
+        linear-gradient(-45deg, #16191a 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #16191a 75%),
+        linear-gradient(-45deg, transparent 75%, #16191a 75%),
+        #24282a;
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      cursor: default;
+      touch-action: none;
+    }
+
+    .preview-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .resize-handle {
+      position: absolute;
+      right: 9px;
+      bottom: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 10px;
+      background: rgba(5, 18, 20, 0.86);
+      color: #69dfcb;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: nwse-resize;
+      user-select: none;
+      touch-action: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.38);
     }
 
-    .preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: black;
+    .resize-handle:hover {
+      background: rgba(10, 42, 42, 0.94);
+    }
+
+    .zoom-control {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #2d383a;
+      border-radius: 10px;
+      background: #121718;
+      cursor: default;
+      user-select: none;
+    }
+
+    .zoom-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: #cfd7d8;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .zoom-value {
+      min-width: 48px;
+      color: #52d7c1;
+      text-align: right;
+    }
+
+    .zoom-row {
+      display: grid;
+      grid-template-columns: 34px 1fr 34px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .zoom-row button {
+      width: 34px;
+      height: 30px;
+      padding: 0;
+      border-radius: 7px;
+      background: #283033;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .zoom-range {
+      margin: 0;
+      cursor: ew-resize;
+    }
+
+    .zoom-actions,
+    .bg-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .zoom-actions button,
+    .bg-actions button {
+      padding: 7px 8px;
+      background: #242a2c;
+      color: #d9e0e1;
+      font-size: 11px;
+      border-radius: 8px;
+    }
+
+    .bg-title {
+      margin-top: 10px;
+      color: #cfd7d8;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .bg-btn.active {
+      background: #16a98f;
+      color: #04100e;
+    }
+
+    .zoom-help {
+      margin-top: 7px;
+      color: #798487;
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .tone-box {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: #101415;
+      color: #9ca8aa;
+      font-size: 11px;
+    }
+
+    .tone-result {
+      color: #f1f3f3;
+      font-weight: 700;
+      text-align: right;
     }
 
     .filename {
-      font-size: 13px;
-      color: #ddd;
       margin: 10px 0 5px;
+      color: #d7dcdd;
+      font-size: 13px;
+      font-weight: 700;
       word-break: break-all;
-      font-weight: bold;
     }
 
     .info {
-      font-size: 12px;
-      color: #aaa;
-      line-height: 1.5;
       margin-bottom: 10px;
+      color: #9da5a8;
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .badge {
       display: inline-block;
+      margin-top: 4px;
+      margin-right: 4px;
       padding: 3px 7px;
       border-radius: 999px;
       background: #263b31;
-      color: #00ff99;
+      color: #3fe2a6;
       font-size: 11px;
-      margin-top: 4px;
-      margin-right: 4px;
     }
 
     .badge.warn {
@@ -266,32 +400,32 @@
       color: #83d9ff;
     }
 
-    .card button {
+    .card > button.download-one {
       width: 100%;
       padding: 10px;
       font-size: 13px;
     }
 
     .empty {
-      text-align: center;
-      color: #888;
       margin-top: 30px;
+      color: #858d90;
+      text-align: center;
     }
 
     .table-box {
-      background: #191919;
-      border: 1px solid #333;
-      border-radius: 16px;
-      overflow: hidden;
       position: sticky;
       top: 16px;
+      overflow: hidden;
+      border: 1px solid #303538;
+      border-radius: 16px;
+      background: #17191b;
     }
 
     .table-title {
       padding: 14px;
-      background: #222;
-      font-weight: bold;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #303538;
+      background: #202326;
+      font-weight: 700;
     }
 
     .table-wrap {
@@ -307,26 +441,22 @@
 
     th,
     td {
-      border-bottom: 1px solid #2f2f2f;
       padding: 8px;
+      border-bottom: 1px solid #2b3032;
       text-align: left;
       white-space: nowrap;
     }
 
     th {
-      background: #151515;
-      color: #00ff99;
       position: sticky;
       top: 0;
       z-index: 1;
+      background: #111415;
+      color: #47d9bd;
     }
 
     tr.active-row {
-      background: #183526;
-    }
-
-    tr.missing-row {
-      opacity: 0.55;
+      background: #15312c;
     }
 
     .warning {
@@ -357,16 +487,17 @@
 
 <body>
   <div class="container">
-    <h1>Resize PNG + Đọc đúng tên file + Tách nền hàng loạt</h1>
+    <h1>HD CODE LOGO</h1>
 
     <div class="note">
-      Web sẽ đọc <b>tên file ảnh mới vừa tải lên</b> để hiển thị đúng Team mới và gắn HEADPIC theo thứ tự/xử lý phù hợp.<br>
-      Có thêm chế độ <b>tách nền tự động hàng loạt</b>. Sau khi ảnh hiện ra, bạn có thể <b>ấn giữ chuột kéo thả card</b> để đổi team sang mã HEADPIC khác. Có thêm nút <b>KHÔNG TÁCH NỀN</b> để resize/chuyển PNG nhưng giữ nguyên nền ảnh.
+      Web tự phân tích logo tối / sáng để chọn nền tương phản.<br>
+      Bây giờ bạn có thể <b>tự đổi nền riêng cho từng logo</b> ngay trong từng card:
+      <b>Tự động / Trắng / Đen / Trong suốt</b>.
     </div>
 
     <div class="drop-zone" id="dropZone">
       <p>Kéo thả ảnh vào đây</p>
-      <span>Hoặc bấm để chọn nhiều ảnh. Sau khi xử lý, có thể ấn giữ chuột kéo thả các ô ảnh để đổi mã HEADPIC.</span>
+      <span>Hoặc bấm để chọn nhiều ảnh. Sau khi xử lý có thể kéo card để đổi mã HEADPIC.</span>
       <input type="file" id="fileInput" accept="image/*" multiple />
     </div>
 
@@ -374,56 +505,67 @@
       <div class="field">
         <label for="sizeInput">Kích thước xuất</label>
         <input type="number" id="sizeInput" value="1000" min="100" max="4000" step="50" />
-        <div class="help">Mặc định là 1000×1000 pixel.</div>
+        <div class="help">Mặc định 1000×1000 px.</div>
       </div>
 
       <div class="field">
-        <label for="removeBgSelect">Tách nền hàng loạt</label>
+        <label for="removeBgSelect">Tách nền khi bấm TẢI XUỐNG trực tiếp</label>
         <select id="removeBgSelect">
-          <option value="off">Tắt tách nền</option>
-          <option value="auto" selected>Bật - tự động tách nền theo 4 góc ảnh</option>
+          <option value="off">Không tách nền</option>
+          <option value="auto" selected>Tự động tách nền</option>
         </select>
-        <div class="help">Tốt nhất với nền trơn. Web sẽ nhận diện màu nền ở các góc và xóa vùng nền nối liền.</div>
+        <div class="help">Hai nút TÁCH NỀN / KHÔNG TÁCH NỀN vẫn ưu tiên lựa chọn của nút.</div>
       </div>
 
       <div class="field">
         <label for="thresholdInput">Độ mạnh tách nền: <span id="thresholdValue">42</span></label>
         <input type="range" id="thresholdInput" min="10" max="120" value="42" step="1" />
-        <div class="help">Tăng nếu còn viền/nền. Giảm nếu ảnh bị mất chi tiết.</div>
+        <div class="help">Tăng nếu còn nền. Giảm nếu logo bị mất chi tiết.</div>
       </div>
 
       <div class="field">
         <label for="featherInput">Làm mềm viền: <span id="featherValue">8</span></label>
         <input type="range" id="featherInput" min="0" max="30" value="8" step="1" />
-        <div class="help">Giúp mép ảnh mượt hơn sau khi tách nền.</div>
+        <div class="help">Làm mép sau khi tách nền mượt hơn.</div>
       </div>
 
       <div class="field">
-        <label for="backgroundSelect">Nền sau khi xuất</label>
+        <label for="logoBackgroundSelect">Nền mặc định bên trong viền</label>
+        <select id="logoBackgroundSelect">
+          <option value="auto" selected>TỰ ĐỘNG TƯƠNG PHẢN</option>
+          <option value="#ffffff">Luôn nền trắng</option>
+          <option value="#000000">Luôn nền đen</option>
+          <option value="transparent">Trong suốt</option>
+        </select>
+        <div class="help">Đây là giá trị mặc định khi vừa xử lý. Sau đó bạn có thể đổi nền từng logo riêng lẻ.</div>
+      </div>
+
+      <div class="field">
+        <label for="backgroundSelect">Nền ngoài vòng tròn</label>
         <select id="backgroundSelect">
           <option value="transparent" selected>Trong suốt</option>
           <option value="#000000">Nền đen</option>
           <option value="#ffffff">Nền trắng</option>
         </select>
-        <div class="help">Muốn tách nền thật sự thì để Trong suốt.</div>
+        <div class="help">Không ảnh hưởng nền bên trong viền của logo.</div>
       </div>
 
       <div class="field">
         <label for="zipNameInput">Tên file nén</label>
         <input type="text" id="zipNameInput" value="headpic_resize_png" />
-        <div class="help">File tải về là .zip và mở được bằng WinRAR.</div>
+        <div class="help">File tải về là .zip.</div>
       </div>
 
       <div class="field">
-        <label>Kiểu đặt tên ảnh xuất ra</label>
+        <label>Kiểu đặt tên ảnh</label>
         <input type="text" value="HEADPIC.png" readonly />
-        <div class="help">Ví dụ: 902000006.png, 902000007.png, 902000008.png...</div>
+        <div class="help">Ví dụ: 902000006.png</div>
       </div>
     </div>
 
     <div class="controls">
       <button id="processBtn">TÁCH NỀN</button>
-      <button class="no-bg" id="processNoBgBtn">KHÔNG TÁCH NỀN</button>
+      <button id="processNoBgBtn">KHÔNG TÁCH NỀN</button>
       <button id="downloadAllBtn">TẢI XUỐNG</button>
       <button class="secondary" id="copyTeamsBtn">SAO CHÉP TÊN ĐỘI</button>
       <button class="secondary" id="downloadEachBtn">Tải từng ảnh riêng lẻ</button>
@@ -440,13 +582,13 @@
       </div>
 
       <div class="table-box">
-        <div class="table-title">Bảng Headpic đang dùng - đọc từ ảnh mới</div>
+        <div class="table-title">Bảng Headpic đang dùng</div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Tên ảnh / Team mới</th>
+                <th>Tên ảnh / Team</th>
                 <th>Avatar</th>
                 <th>Headpic</th>
               </tr>
@@ -486,29 +628,32 @@
       { stt: 24, team: "", avatar: "Jota", headpic: "902000278" }
     ];
 
-    const dropZone = document.getElementById("dropZone");
-    const fileInput = document.getElementById("fileInput");
-    const resultGrid = document.getElementById("resultGrid");
-    const emptyText = document.getElementById("emptyText");
-    const summaryText = document.getElementById("summaryText");
-    const mappingTable = document.getElementById("mappingTable");
+    const $ = (id) => document.getElementById(id);
 
-    const processBtn = document.getElementById("processBtn");
-    const processNoBgBtn = document.getElementById("processNoBgBtn");
-    const downloadAllBtn = document.getElementById("downloadAllBtn");
-    const copyTeamsBtn = document.getElementById("copyTeamsBtn");
-    const downloadEachBtn = document.getElementById("downloadEachBtn");
-    const resetAllBtn = document.getElementById("resetAllBtn");
-    const clearBtn = document.getElementById("clearBtn");
+    const dropZone = $("dropZone");
+    const fileInput = $("fileInput");
+    const resultGrid = $("resultGrid");
+    const emptyText = $("emptyText");
+    const summaryText = $("summaryText");
+    const mappingTable = $("mappingTable");
 
-    const sizeInput = document.getElementById("sizeInput");
-    const removeBgSelect = document.getElementById("removeBgSelect");
-    const thresholdInput = document.getElementById("thresholdInput");
-    const featherInput = document.getElementById("featherInput");
-    const thresholdValue = document.getElementById("thresholdValue");
-    const featherValue = document.getElementById("featherValue");
-    const backgroundSelect = document.getElementById("backgroundSelect");
-    const zipNameInput = document.getElementById("zipNameInput");
+    const processBtn = $("processBtn");
+    const processNoBgBtn = $("processNoBgBtn");
+    const downloadAllBtn = $("downloadAllBtn");
+    const copyTeamsBtn = $("copyTeamsBtn");
+    const downloadEachBtn = $("downloadEachBtn");
+    const resetAllBtn = $("resetAllBtn");
+    const clearBtn = $("clearBtn");
+
+    const sizeInput = $("sizeInput");
+    const removeBgSelect = $("removeBgSelect");
+    const thresholdInput = $("thresholdInput");
+    const featherInput = $("featherInput");
+    const thresholdValue = $("thresholdValue");
+    const featherValue = $("featherValue");
+    const logoBackgroundSelect = $("logoBackgroundSelect");
+    const backgroundSelect = $("backgroundSelect");
+    const zipNameInput = $("zipNameInput");
 
     let sourceItems = [];
     let processedImages = [];
@@ -524,15 +669,17 @@
       featherValue.textContent = featherInput.value;
     });
 
-    dropZone.addEventListener("click", () => fileInput.click());
+    dropZone.addEventListener("click", () => {
+      fileInput.click();
+    });
 
-    fileInput.addEventListener("change", (e) => {
-      addFiles(e.target.files);
+    fileInput.addEventListener("change", (event) => {
+      addFiles(event.target.files);
       fileInput.value = "";
     });
 
-    dropZone.addEventListener("dragover", (e) => {
-      e.preventDefault();
+    dropZone.addEventListener("dragover", (event) => {
+      event.preventDefault();
       dropZone.classList.add("dragover");
     });
 
@@ -540,49 +687,48 @@
       dropZone.classList.remove("dragover");
     });
 
-    dropZone.addEventListener("drop", (e) => {
-      e.preventDefault();
+    dropZone.addEventListener("drop", (event) => {
+      event.preventDefault();
       dropZone.classList.remove("dragover");
-      addFiles(e.dataTransfer.files);
+      addFiles(event.dataTransfer.files);
     });
 
     processBtn.addEventListener("click", async () => {
-      if (sourceItems.length === 0) {
+      if (!sourceItems.length) {
         alert("Bạn chưa chọn ảnh.");
         return;
       }
-
       await processAllImages(true);
     });
 
     processNoBgBtn.addEventListener("click", async () => {
-      if (sourceItems.length === 0) {
+      if (!sourceItems.length) {
         alert("Bạn chưa chọn ảnh.");
         return;
       }
-
       await processAllImages(false);
     });
 
     downloadAllBtn.addEventListener("click", async () => {
-      if (sourceItems.length === 0 && processedImages.length === 0) {
+      if (!sourceItems.length && !processedImages.length) {
         alert("Bạn chưa chọn ảnh.");
         return;
       }
 
-      if (processedImages.length === 0) {
-        await processAllImages();
+      if (!processedImages.length) {
+        await processAllImages(removeBgSelect.value === "auto");
       }
 
       await downloadZip();
     });
 
     copyTeamsBtn.addEventListener("click", async () => {
-      const teamNames = (sourceItems.length > 0
-        ? sourceItems.map(item => item.displayTeam || getDisplayTeamFromFileName(item.file.name, item.data))
-        : headpicData.map(row => cleanNamePart(row.team || ""))
+      const teamNames = (
+        sourceItems.length
+          ? sourceItems.map((item) => item.displayTeam || getDisplayTeamFromFileName(item.file.name, item.data))
+          : headpicData.map((row) => cleanNamePart(row.team || ""))
       )
-        .filter(team => team.length > 0)
+        .filter(Boolean)
         .join("\n");
 
       if (!teamNames) {
@@ -600,85 +746,81 @@
       copyTeamsBtn.textContent = "Đã sao chép tên team!";
       copyTeamsBtn.classList.add("copy-done");
 
-      summaryText.innerHTML =
-        "Đã sao chép <b>" +
-        teamNames.split("\n").length +
-        "</b> tên team theo đúng thứ tự STT.";
-
       setTimeout(() => {
         copyTeamsBtn.textContent = oldText;
         copyTeamsBtn.classList.remove("copy-done");
       }, 1800);
     });
 
-    downloadEachBtn.addEventListener("click", () => {
-      if (processedImages.length === 0) {
-        alert("Bạn cần bấm Resize, tách nền & chuyển PNG trước.");
+    downloadEachBtn.addEventListener("click", async () => {
+      if (!processedImages.length) {
+        alert("Bạn cần xử lý ảnh trước.");
         return;
       }
 
+      await commitAllDirtyImages();
+
       processedImages.forEach((item, index) => {
         setTimeout(() => {
-          downloadFile(item.url, item.outputName);
+          downloadBlob(item.blob, item.outputName);
         }, index * 250);
       });
     });
 
     resetAllBtn.addEventListener("click", () => {
-      const ok = confirm("Bạn có chắc muốn làm mới toàn bộ và xóa hết tất cả dữ liệu không?");
-      if (!ok) return;
-
+      if (!confirm("Bạn có chắc muốn làm mới toàn bộ không?")) {
+        return;
+      }
       resetEverything();
     });
 
-    clearBtn.addEventListener("click", () => {
-      resetEverything();
-    });
+    clearBtn.addEventListener("click", resetEverything);
 
     function resetEverything() {
-      clearProcessedUrls();
+      clearProcessedState();
 
       sourceItems = [];
       processedImages = [];
       draggedCardIndex = null;
 
       resultGrid.innerHTML = "";
-      summaryText.textContent = "";
+      mappingTable.innerHTML = "";
       fileInput.value = "";
 
-      // Đưa toàn bộ tùy chọn về mặc định.
       sizeInput.value = "1000";
       removeBgSelect.value = "auto";
       thresholdInput.value = "42";
       featherInput.value = "8";
       thresholdValue.textContent = "42";
       featherValue.textContent = "8";
+      logoBackgroundSelect.value = "auto";
       backgroundSelect.value = "transparent";
       zipNameInput.value = "headpic_resize_png";
 
       updateEmptyText();
+      summaryText.textContent = "Đã làm mới toàn bộ.";
+    }
 
-      // Xóa luôn toàn bộ dữ liệu đang hiển thị ở bảng Headpic đang dùng.
-      mappingTable.innerHTML = "";
-
-      summaryText.innerHTML = "Đã làm mới toàn bộ. Tất cả dữ liệu cũ đã được xóa.";
+    function clearProcessedState() {
+      processedImages.forEach((item) => {
+        if (item.previewRaf) cancelAnimationFrame(item.previewRaf);
+      });
     }
 
     function addFiles(files) {
-      const imageFiles = Array.from(files).filter(file => file.type.startsWith("image/"));
+      const imageFiles = Array.from(files).filter((file) => file.type.startsWith("image/"));
 
-      if (imageFiles.length === 0) {
+      if (!imageFiles.length) {
         alert("Vui lòng chọn file ảnh.");
         return;
       }
 
       const startIndex = sourceItems.length;
 
-      imageFiles.forEach((file, i) => {
-        const orderIndex = startIndex + i;
+      imageFiles.forEach((file, index) => {
+        const orderIndex = startIndex + index;
         const match = findDataByFileName(file.name);
         const fallbackData = headpicData[orderIndex] || null;
-
         const dataForFile = match.data || fallbackData;
 
         sourceItems.push({
@@ -686,29 +828,12 @@
           originalIndex: orderIndex,
           data: dataForFile,
           displayTeam: getDisplayTeamFromFileName(file.name, dataForFile),
-          matchType: match.data ? match.type : (fallbackData ? "order_fallback" : "unmatched")
+          matchType: match.data ? match.type : fallbackData ? "order_fallback" : "unmatched"
         });
       });
 
       sortSourceItemsByHeadpicOrder();
-
-      const matchedCount = sourceItems.filter(item => item.matchType !== "order_fallback" && item.matchType !== "unmatched").length;
-      const fallbackCount = sourceItems.filter(item => item.matchType === "order_fallback").length;
-      const unmatchedCount = sourceItems.filter(item => item.matchType === "unmatched").length;
-
-      let msg =
-        "Đã thêm " + sourceItems.length + " ảnh. Đọc đúng theo tên file được " +
-        matchedCount + " ảnh.";
-
-      if (fallbackCount > 0) {
-        msg += " Có " + fallbackCount + " ảnh chưa đọc được tên nên tạm dùng thứ tự.";
-      }
-
-      if (unmatchedCount > 0) {
-        msg += " Có " + unmatchedCount + " ảnh chưa có mapping.";
-      }
-
-      summaryText.textContent = msg;
+      summaryText.textContent = `Đã thêm ${sourceItems.length} ảnh.`;
       updateEmptyText();
       renderMappingTable();
     }
@@ -716,12 +841,10 @@
     function getDisplayTeamFromFileName(fileName, data) {
       let name = String(fileName || "").replace(/\.[^/.]+$/, "");
 
-      // Xóa mã HEADPIC nếu tên file có chứa mã.
       if (data && data.headpic) {
         name = name.replace(new RegExp(data.headpic, "g"), "");
       }
 
-      // Xóa đuôi số dài, STT đầu file, dấu phân cách thừa.
       name = name
         .replace(/\d{6,}/g, "")
         .replace(/^\s*\d{1,3}[\s._-]+/, "")
@@ -729,7 +852,6 @@
         .replace(/\s+/g, " ")
         .trim();
 
-      // Nếu tên bị rỗng, dùng lại tên file gốc không đuôi.
       if (!name) {
         name = String(fileName || "").replace(/\.[^/.]+$/, "").trim();
       }
@@ -742,42 +864,41 @@
         const aOrder = a.data ? a.data.stt : 9999 + a.originalIndex;
         const bOrder = b.data ? b.data.stt : 9999 + b.originalIndex;
 
-        if (aOrder !== bOrder) return aOrder - bOrder;
+        if (aOrder !== bOrder) {
+          return aOrder - bOrder;
+        }
+
         return a.originalIndex - b.originalIndex;
       });
     }
 
     function findDataByFileName(fileName) {
-      const nameNoExt = String(fileName).replace(/\.[^/.]+$/, "");
-      const normalizedFileName = normalizeText(nameNoExt);
-      const digits = nameNoExt.match(/\d{6,}/g) || [];
+      const rawName = String(fileName).replace(/\.[^/.]+$/, "");
+      const normalized = normalizeText(rawName);
+      const digits = rawName.match(/\d{6,}/g) || [];
 
-      // Ưu tiên 1: nếu tên file có mã HEADPIC thì khớp trực tiếp.
       for (const row of headpicData) {
         if (digits.includes(row.headpic)) {
           return { data: row, type: "headpic" };
         }
       }
 
-      // Ưu tiên 2: nếu tên file là tên Avatar, ví dụ Kelly.png, Andrew.png, Ngộ Không.png.
       for (const row of headpicData) {
-        if (normalizedFileName === normalizeText(row.avatar)) {
+        if (normalized === normalizeText(row.avatar)) {
           return { data: row, type: "avatar_exact" };
         }
       }
 
-      // Ưu tiên 3: nếu tên file có chứa tên Avatar, ví dụ 02_Kelly.png.
       for (const row of headpicData) {
         const avatar = normalizeText(row.avatar);
-        if (avatar && normalizedFileName.includes(avatar)) {
+        if (avatar && tokenContains(normalized, avatar)) {
           return { data: row, type: "avatar_contains" };
         }
       }
 
-      // Ưu tiên 4: nếu tên file có chứa tên Team.
       for (const row of headpicData) {
         const team = normalizeText(row.team);
-        if (team && normalizedFileName.includes(team)) {
+        if (team && tokenContains(normalized, team)) {
           return { data: row, type: "team_contains" };
         }
       }
@@ -785,48 +906,45 @@
       return { data: null, type: "unmatched" };
     }
 
+    function tokenContains(text, token) {
+      return (` ${text} `).includes(` ${token} `);
+    }
+
     async function processAllImages(forceRemoveBg = null) {
-      clearProcessedUrls();
+      clearProcessedState();
       processedImages = [];
       resultGrid.innerHTML = "";
 
       const size = clampNumber(parseInt(sizeInput.value, 10), 100, 4000, 1000);
-      const removeBg = forceRemoveBg === null
-        ? removeBgSelect.value === "auto"
-        : forceRemoveBg;
+      const removeBg = forceRemoveBg === null ? removeBgSelect.value === "auto" : forceRemoveBg;
       const threshold = clampNumber(parseInt(thresholdInput.value, 10), 10, 120, 42);
       const feather = clampNumber(parseInt(featherInput.value, 10), 0, 30, 8);
-      const outputBackground = backgroundSelect.value;
+      const outerBackground = backgroundSelect.value;
+      const defaultLogoBackgroundMode = logoBackgroundSelect.value;
 
       processBtn.disabled = true;
       processNoBgBtn.disabled = true;
       downloadAllBtn.disabled = true;
-      processBtn.textContent = removeBg ? "Đang tách nền..." : "Đang xử lý không tách nền...";
-      processNoBgBtn.textContent = removeBg ? "KHÔNG TÁCH NỀN" : "Đang xử lý...";
 
       try {
         const usedNames = new Set();
 
         for (let i = 0; i < sourceItems.length; i++) {
-          const itemSource = sourceItems[i];
+          const source = sourceItems[i];
 
-          summaryText.textContent =
-            "Đang xử lý " + (i + 1) + "/" + sourceItems.length +
-            ": " + itemSource.file.name;
+          summaryText.textContent = `Đang xử lý ${i + 1}/${sourceItems.length}: ${source.file.name}`;
 
-          const item = await processImageToPng(
-            itemSource.file,
+          const item = await createProcessedItem({
+            source,
             size,
             removeBg,
             threshold,
             feather,
-            outputBackground,
-            i,
-            itemSource.data,
-            itemSource.matchType,
-            itemSource.displayTeam,
+            outerBackground,
+            defaultLogoBackgroundMode,
+            index: i,
             usedNames
-          );
+          });
 
           processedImages.push(item);
           addCard(item, processedImages.length - 1);
@@ -836,88 +954,93 @@
         updateEmptyText();
         renderMappingTable();
       } catch (error) {
+        console.error(error);
         alert(error.message);
       } finally {
         processBtn.disabled = false;
         processNoBgBtn.disabled = false;
         downloadAllBtn.disabled = false;
-        processBtn.textContent = "TÁCH NỀN";
-        processNoBgBtn.textContent = "KHÔNG TÁCH NỀN";
       }
     }
 
-    function processImageToPng(file, size, removeBg, threshold, feather, outputBackground, index, data, matchType, displayTeam, usedNames) {
+    async function createProcessedItem({
+      source,
+      size,
+      removeBg,
+      threshold,
+      feather,
+      outerBackground,
+      defaultLogoBackgroundMode,
+      index,
+      usedNames
+    }) {
+      const image = await readImageFile(source.file);
+
+      const sourceCanvas = document.createElement("canvas");
+      sourceCanvas.width = image.width;
+      sourceCanvas.height = image.height;
+
+      const sourceCtx = sourceCanvas.getContext("2d", { willReadFrequently: true });
+      sourceCtx.drawImage(image, 0, 0);
+
+      let removedPixelCount = 0;
+
+      if (removeBg) {
+        removedPixelCount = removeBackgroundFromCanvas(sourceCanvas, threshold, feather);
+      }
+
+      const bounds = detectForegroundBounds(sourceCanvas, threshold, removeBg);
+
+      const tone = analyzeLogoTone(sourceCanvas, bounds, threshold, removeBg);
+      const autoLogoBackground = tone.kind === "dark" ? "#ffffff" : "#000000";
+
+      const item = {
+        originalName: source.file.name,
+        outputName: makeOutputName(source.file.name, index, source.data, usedNames),
+        originalSize: source.file.size,
+        outputSize: 0,
+        size,
+        blob: null,
+        data: source.data,
+        matchType: source.matchType,
+        displayTeam: source.displayTeam,
+        removeBg,
+        removedPixelCount,
+        sourceCanvas,
+        bounds,
+        threshold,
+        outerBackground,
+        defaultLogoBackgroundMode,
+        logoBackgroundMode: defaultLogoBackgroundMode,
+        autoLogoBackground,
+        logoBackground: resolveLogoBackground(defaultLogoBackgroundMode, autoLogoBackground),
+        tone,
+        zoom: 1,
+        dirty: true,
+        commitPromise: null,
+        previewRaf: null
+      };
+
+      await commitItem(item);
+      return item;
+    }
+
+    function resolveLogoBackground(mode, autoBackground) {
+      if (mode === "auto") return autoBackground;
+      return mode;
+    }
+
+    function readImageFile(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
 
-        reader.onload = function(event) {
-          const img = new Image();
+        reader.onload = (event) => {
+          const image = new Image();
 
-          img.onload = function() {
-            const workingCanvas = document.createElement("canvas");
-            workingCanvas.width = img.width;
-            workingCanvas.height = img.height;
+          image.onload = () => resolve(image);
+          image.onerror = () => reject(new Error("Không thể đọc ảnh: " + file.name));
 
-            const workingCtx = workingCanvas.getContext("2d", { willReadFrequently: true });
-            workingCtx.drawImage(img, 0, 0);
-
-            let removedPixelCount = 0;
-
-            if (removeBg) {
-              removedPixelCount = removeBackgroundFromCanvas(workingCanvas, threshold, feather);
-            }
-
-            const canvas = document.createElement("canvas");
-            canvas.width = size;
-            canvas.height = size;
-
-            const ctx = canvas.getContext("2d");
-
-            if (outputBackground === "transparent") {
-              ctx.clearRect(0, 0, size, size);
-            } else {
-              ctx.fillStyle = outputBackground;
-              ctx.fillRect(0, 0, size, size);
-            }
-
-            const scale = Math.min(size / workingCanvas.width, size / workingCanvas.height);
-            const newWidth = workingCanvas.width * scale;
-            const newHeight = workingCanvas.height * scale;
-            const x = (size - newWidth) / 2;
-            const y = (size - newHeight) / 2;
-
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = "high";
-            ctx.drawImage(workingCanvas, x, y, newWidth, newHeight);
-
-            canvas.toBlob(function(blob) {
-              if (!blob) {
-                reject(new Error("Không thể xử lý ảnh: " + file.name));
-                return;
-              }
-
-              const url = URL.createObjectURL(blob);
-              const outputName = makeOutputName(file.name, index, data, usedNames);
-
-              resolve({
-                originalName: file.name,
-                outputName,
-                originalSize: file.size,
-                outputSize: blob.size,
-                size,
-                url,
-                blob,
-                data,
-                matchType,
-                displayTeam,
-                removeBg,
-                removedPixelCount
-              });
-            }, "image/png");
-          };
-
-          img.onerror = () => reject(new Error("Không thể đọc ảnh: " + file.name));
-          img.src = event.target.result;
+          image.src = event.target.result;
         };
 
         reader.onerror = () => reject(new Error("Không thể đọc file: " + file.name));
@@ -925,221 +1048,439 @@
       });
     }
 
-    function removeBackgroundFromCanvas(canvas, threshold, feather) {
+    function getFrame(size) {
+      const center = size / 2;
+      const outerRadius = size * 0.472;
+      const ringThickness = Math.max(3, size * 0.012);
+      const ringRadius = outerRadius - ringThickness / 2;
+      const clipRadius = outerRadius - ringThickness - size * 0.006;
+      const safeRadius = clipRadius - size * 0.027;
+
+      return {
+        center,
+        outerRadius,
+        ringThickness,
+        ringRadius,
+        clipRadius,
+        safeRadius
+      };
+    }
+
+    function renderComposite(item, canvas, targetSize) {
+      canvas.width = targetSize;
+      canvas.height = targetSize;
+
+      const ctx = canvas.getContext("2d");
+      const frame = getFrame(targetSize);
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      ctx.clearRect(0, 0, targetSize, targetSize);
+
+      if (item.outerBackground !== "transparent") {
+        ctx.fillStyle = item.outerBackground;
+        ctx.fillRect(0, 0, targetSize, targetSize);
+      }
+
+      if (item.logoBackground !== "transparent") {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(frame.center, frame.center, frame.clipRadius, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fillStyle = item.logoBackground;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      drawLogoIntoFrame(ctx, item, targetSize, frame);
+      drawLogoBorder(ctx, targetSize, frame);
+    }
+
+    function drawLogoIntoFrame(ctx, item, size, frame) {
+      const bounds = item.bounds;
+
+      const sourceWidth = Math.max(1, bounds.maxX - bounds.minX + 1);
+      const sourceHeight = Math.max(1, bounds.maxY - bounds.minY + 1);
+
+      const safeDiameter = frame.safeRadius * 2;
+      const autoScale = Math.min(safeDiameter / sourceWidth, safeDiameter / sourceHeight);
+      const finalScale = autoScale * item.zoom;
+
+      const drawWidth = sourceWidth * finalScale;
+      const drawHeight = sourceHeight * finalScale;
+
+      const drawX = frame.center - drawWidth / 2;
+      const drawY = frame.center - drawHeight / 2;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(frame.center, frame.center, frame.clipRadius, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.clip();
+
+      ctx.drawImage(
+        item.sourceCanvas,
+        bounds.minX,
+        bounds.minY,
+        sourceWidth,
+        sourceHeight,
+        drawX,
+        drawY,
+        drawWidth,
+        drawHeight
+      );
+
+      ctx.restore();
+    }
+
+    function drawLogoBorder(ctx, size, frame = getFrame(size)) {
+      ctx.save();
+
+      ctx.shadowColor = "rgba(0, 0, 0, 0.25)";
+      ctx.shadowBlur = size * 0.006;
+      ctx.lineWidth = frame.ringThickness;
+
+      const gradient = ctx.createLinearGradient(size * 0.12, size * 0.12, size * 0.88, size * 0.88);
+      gradient.addColorStop(0.00, "#020609");
+      gradient.addColorStop(0.16, "#062a2a");
+      gradient.addColorStop(0.32, "#0d6158");
+      gradient.addColorStop(0.48, "#041619");
+      gradient.addColorStop(0.63, "#071f23");
+      gradient.addColorStop(0.76, "#6b1821");
+      gradient.addColorStop(0.84, "#a52a33");
+      gradient.addColorStop(0.92, "#153f39");
+      gradient.addColorStop(1.00, "#02070a");
+
+      ctx.strokeStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(frame.center, frame.center, frame.ringRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.shadowBlur = 0;
+      ctx.lineWidth = Math.max(1, size * 0.0018);
+
+      const highlight = ctx.createLinearGradient(size * 0.18, size * 0.10, size * 0.82, size * 0.90);
+      highlight.addColorStop(0, "rgba(112, 226, 205, 0.45)");
+      highlight.addColorStop(0.52, "rgba(30, 80, 76, 0.05)");
+      highlight.addColorStop(0.78, "rgba(233, 77, 86, 0.38)");
+      highlight.addColorStop(1, "rgba(12, 37, 40, 0.25)");
+
+      ctx.strokeStyle = highlight;
+      ctx.beginPath();
+      ctx.arc(frame.center, frame.center, frame.ringRadius - frame.ringThickness * 0.34, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function analyzeLogoTone(canvas, bounds, threshold, removeBg) {
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
       const width = canvas.width;
       const height = canvas.height;
       const imageData = ctx.getImageData(0, 0, width, height);
       const data = imageData.data;
+
       const bgSamples = getBackgroundSamples(data, width, height);
-      const visited = new Uint8Array(width * height);
-      const removeMask = new Uint8Array(width * height);
-      const queue = [];
+      const boxWidth = Math.max(1, bounds.maxX - bounds.minX + 1);
+      const boxHeight = Math.max(1, bounds.maxY - bounds.minY + 1);
+      const step = Math.max(1, Math.floor(Math.max(boxWidth, boxHeight) / 180));
+      const bgThreshold = clampNumber(Math.round(threshold * 0.9), 12, 105, 36);
 
-      addSeed(0, 0);
-      addSeed(width - 1, 0);
-      addSeed(0, height - 1);
-      addSeed(width - 1, height - 1);
+      let count = 0;
+      let luminanceSum = 0;
+      let darkCount = 0;
+      let brightCount = 0;
 
-      const stepX = Math.max(1, Math.floor(width / 24));
-      const stepY = Math.max(1, Math.floor(height / 24));
+      for (let y = bounds.minY; y <= bounds.maxY; y += step) {
+        for (let x = bounds.minX; x <= bounds.maxX; x += step) {
+          const pixelIndex = y * width + x;
+          const i = pixelIndex * 4;
+          const alpha = data[i + 3];
 
-      for (let x = 0; x < width; x += stepX) {
-        addSeed(x, 0);
-        addSeed(x, height - 1);
+          if (alpha < 24) continue;
+
+          if (!removeBg && isBackgroundPixel(data, pixelIndex, bgSamples, bgThreshold)) {
+            continue;
+          }
+
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+          count++;
+          luminanceSum += luminance;
+
+          if (luminance < 105) darkCount++;
+          if (luminance > 165) brightCount++;
+        }
       }
 
-      for (let y = 0; y < height; y += stepY) {
-        addSeed(0, y);
-        addSeed(width - 1, y);
+      if (count < 12) {
+        const centerX = Math.floor((bounds.minX + bounds.maxX) / 2);
+        const centerY = Math.floor((bounds.minY + bounds.maxY) / 2);
+        const radiusX = Math.max(1, Math.floor(boxWidth * 0.35));
+        const radiusY = Math.max(1, Math.floor(boxHeight * 0.35));
+
+        for (let y = Math.max(0, centerY - radiusY); y <= Math.min(height - 1, centerY + radiusY); y += step) {
+          for (let x = Math.max(0, centerX - radiusX); x <= Math.min(width - 1, centerX + radiusX); x += step) {
+            const i = (y * width + x) * 4;
+
+            if (data[i + 3] < 24) continue;
+
+            const luminance = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+
+            count++;
+            luminanceSum += luminance;
+
+            if (luminance < 105) darkCount++;
+            if (luminance > 165) brightCount++;
+          }
+        }
       }
 
-      let head = 0;
-      let removed = 0;
+      const averageLuminance = count ? luminanceSum / count : 128;
+      const darkRatio = count ? darkCount / count : 0.5;
+      const brightRatio = count ? brightCount / count : 0.5;
 
-      while (head < queue.length) {
-        const index = queue[head++];
-        const x = index % width;
-        const y = Math.floor(index / width);
+      let kind;
 
-        if (!isBackgroundPixel(data, index, bgSamples, threshold)) continue;
-
-        removeMask[index] = 1;
-        removed++;
-
-        if (x > 0) visit(index - 1);
-        if (x < width - 1) visit(index + 1);
-        if (y > 0) visit(index - width);
-        if (y < height - 1) visit(index + width);
+      if (darkRatio >= 0.52 && darkRatio > brightRatio * 1.12) {
+        kind = "dark";
+      } else if (brightRatio >= 0.52 && brightRatio > darkRatio * 1.12) {
+        kind = "light";
+      } else {
+        kind = averageLuminance < 132 ? "dark" : "light";
       }
 
-      for (let i = 0; i < removeMask.length; i++) {
-        if (removeMask[i]) data[i * 4 + 3] = 0;
-      }
-
-      if (feather > 0) {
-        softenEdges(data, width, height, removeMask, feather);
-      }
-
-      decontaminateEdges(data, width, height, bgSamples, removeMask);
-      ctx.putImageData(imageData, 0, 0);
-      return removed;
-
-      function addSeed(x, y) {
-        visit(y * width + x);
-      }
-
-      function visit(idx) {
-        if (idx < 0 || idx >= visited.length) return;
-        if (visited[idx]) return;
-        visited[idx] = 1;
-        queue.push(idx);
-      }
+      return {
+        kind,
+        averageLuminance,
+        darkRatio,
+        brightRatio,
+        sampleCount: count
+      };
     }
 
-    function getBackgroundSamples(data, width, height) {
-      const points = [
-        [0, 0],
-        [width - 1, 0],
-        [0, height - 1],
-        [width - 1, height - 1],
-        [Math.floor(width / 2), 0],
-        [Math.floor(width / 2), height - 1],
-        [0, Math.floor(height / 2)],
-        [width - 1, Math.floor(height / 2)]
-      ];
+    function toneText(item) {
+      const currentBgText = backgroundModeText(item.logoBackgroundMode, item.autoLogoBackground, item.logoBackground);
 
-      return points.map(([x, y]) => {
-        const i = (y * width + x) * 4;
-        return [data[i], data[i + 1], data[i + 2]];
+      if (item.tone.kind === "dark") {
+        return `Logo tối · ${currentBgText}`;
+      }
+
+      return `Logo sáng · ${currentBgText}`;
+    }
+
+    function backgroundModeText(mode, autoColor, finalColor) {
+      if (mode === "auto") {
+        return autoColor === "#ffffff" ? "Tự động → nền trắng" : "Tự động → nền đen";
+      }
+      if (mode === "#ffffff") return "Nền trắng";
+      if (mode === "#000000") return "Nền đen";
+      return "Trong suốt";
+    }
+
+    function renderPreview(item, canvas) {
+      if (!canvas) return;
+      renderComposite(item, canvas, 520);
+    }
+
+    function schedulePreview(item, canvas) {
+      if (item.previewRaf) {
+        cancelAnimationFrame(item.previewRaf);
+      }
+
+      item.previewRaf = requestAnimationFrame(() => {
+        item.previewRaf = null;
+        renderPreview(item, canvas);
       });
     }
 
-    function isBackgroundPixel(data, index, samples, threshold) {
-      const i = index * 4;
-      const a = data[i + 3];
-      if (a < 10) return true;
-
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-
-      for (const sample of samples) {
-        if (colorDistance(r, g, b, sample[0], sample[1], sample[2]) <= threshold) return true;
+    async function commitItem(item) {
+      if (!item.dirty && item.blob) {
+        return item.blob;
       }
 
-      return false;
+      if (item.commitPromise) {
+        return item.commitPromise;
+      }
+
+      item.commitPromise = (async () => {
+        const canvas = document.createElement("canvas");
+        renderComposite(item, canvas, item.size);
+        const blob = await canvasToBlob(canvas);
+
+        item.blob = blob;
+        item.outputSize = blob.size;
+        item.dirty = false;
+
+        return blob;
+      })();
+
+      try {
+        return await item.commitPromise;
+      } finally {
+        item.commitPromise = null;
+      }
     }
 
-    function colorDistance(r1, g1, b1, r2, g2, b2) {
-      const dr = r1 - r2;
-      const dg = g1 - g2;
-      const db = b1 - b2;
-      return Math.sqrt(dr * dr + dg * dg + db * db);
+    function canvasToBlob(canvas) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("Không thể tạo PNG."));
+            return;
+          }
+          resolve(blob);
+        }, "image/png");
+      });
     }
 
-    function softenEdges(data, width, height, removeMask, feather) {
-      const radius = Math.min(feather, 30);
-      if (radius <= 0) return;
+    async function commitAllDirtyImages() {
+      for (const item of processedImages) {
+        await commitItem(item);
+      }
+    }
 
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const idx = y * width + x;
-          if (removeMask[idx]) continue;
+    function setItemZoom(item, percent, card, commitAfter = false) {
+      const cleanPercent = clampNumber(Math.round(percent), 40, 220, 100);
 
-          let nearest = radius + 1;
+      item.zoom = cleanPercent / 100;
+      item.dirty = true;
 
-          for (let dy = -radius; dy <= radius; dy++) {
-            const yy = y + dy;
-            if (yy < 0 || yy >= height) continue;
+      if (card && card.isConnected) {
+        const range = card.querySelector(".zoom-range");
+        const value = card.querySelector(".zoom-value");
+        const canvas = card.querySelector(".preview-canvas");
 
-            for (let dx = -radius; dx <= radius; dx++) {
-              const xx = x + dx;
-              if (xx < 0 || xx >= width) continue;
+        if (range) range.value = cleanPercent;
+        if (value) value.textContent = cleanPercent + "%";
 
-              const nIdx = yy * width + xx;
-              if (!removeMask[nIdx]) continue;
+        schedulePreview(item, canvas);
+      }
 
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist < nearest) nearest = dist;
-            }
-          }
+      if (commitAfter) {
+        commitItem(item).then(() => updateCardOutputSize(card, item));
+      }
+    }
 
-          if (nearest <= radius) {
-            const alphaIndex = idx * 4 + 3;
-            const keep = Math.min(1, nearest / radius);
-            const minAlpha = 0.25;
-            data[alphaIndex] = Math.round(data[alphaIndex] * Math.max(minAlpha, keep));
-          }
+    function setItemBackgroundMode(item, mode, card, commitAfter = false) {
+      item.logoBackgroundMode = mode;
+      item.logoBackground = resolveLogoBackground(mode, item.autoLogoBackground);
+      item.dirty = true;
+
+      if (card && card.isConnected) {
+        const canvas = card.querySelector(".preview-canvas");
+        schedulePreview(item, canvas);
+        updateCardBackgroundButtons(card, item);
+        updateCardToneText(card, item);
+        updateCardInsideBackgroundText(card, item);
+      }
+
+      if (commitAfter) {
+        commitItem(item).then(() => updateCardOutputSize(card, item));
+      }
+    }
+
+    function updateCardBackgroundButtons(card, item) {
+      const buttons = card.querySelectorAll(".bg-btn");
+      buttons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.bgMode === item.logoBackgroundMode);
+      });
+    }
+
+    function updateCardToneText(card, item) {
+      const text = card.querySelector(".tone-result");
+      if (text) text.textContent = toneText(item);
+    }
+
+    function updateCardInsideBackgroundText(card, item) {
+      const text = card.querySelector(".inside-bg-value");
+      if (text) {
+        if (item.logoBackgroundMode === "auto") {
+          text.textContent = item.autoLogoBackground === "#ffffff" ? "Tự động → Trắng" : "Tự động → Đen";
+        } else if (item.logoBackgroundMode === "#ffffff") {
+          text.textContent = "Trắng";
+        } else if (item.logoBackgroundMode === "#000000") {
+          text.textContent = "Đen";
+        } else {
+          text.textContent = "Trong suốt";
         }
       }
     }
 
-    function decontaminateEdges(data, width, height, bgSamples, removeMask) {
-      const bg = averageColor(bgSamples);
-      const total = width * height;
-
-      for (let idx = 0; idx < total; idx++) {
-        if (removeMask[idx]) continue;
-
-        const alpha = data[idx * 4 + 3];
-        if (alpha === 255) continue;
-
-        const i = idx * 4;
-        const mix = (255 - alpha) / 255;
-        const keep = Math.max(0.15, 1 - mix);
-
-        data[i] = clampByte((data[i] - bg[0] * mix) / keep);
-        data[i + 1] = clampByte((data[i + 1] - bg[1] * mix) / keep);
-        data[i + 2] = clampByte((data[i + 2] - bg[2] * mix) / keep);
-      }
+    function updateCardOutputSize(card, item) {
+      if (!card || !card.isConnected) return;
+      const outputSize = card.querySelector(".output-size-value");
+      if (outputSize) outputSize.textContent = formatBytes(item.outputSize);
     }
 
-    function averageColor(samples) {
-      const sum = [0, 0, 0];
-      for (const s of samples) {
-        sum[0] += s[0];
-        sum[1] += s[1];
-        sum[2] += s[2];
-      }
-      return [sum[0] / samples.length, sum[1] / samples.length, sum[2] / samples.length];
-    }
+    function setupResizeHandle(handle, item, card) {
+      let startX = 0;
+      let startY = 0;
+      let startZoom = 1;
+      let activePointerId = null;
 
-    function clampByte(value) {
-      return Math.max(0, Math.min(255, Math.round(value)));
-    }
+      const onPointerMove = (event) => {
+        if (activePointerId === null) return;
+        if (event.pointerId !== activePointerId) return;
 
-    function makeOutputName(originalName, index, data, usedNames) {
-      let baseName = "";
+        const deltaX = event.clientX - startX;
+        const deltaY = event.clientY - startY;
+        const delta = (deltaX + deltaY) / 3.2;
+        const percent = startZoom * 100 + delta;
 
-      if (data) {
-        baseName = cleanNamePart(data.headpic || "");
-      } else {
-        baseName = originalName.replace(/\.[^/.]+$/, "").trim() || ("image_" + (index + 1));
-      }
+        setItemZoom(item, percent, card, false);
+      };
 
-      baseName = sanitizeFileName(baseName);
+      const finish = async (event) => {
+        if (activePointerId === null) return;
+        if (event && event.pointerId !== undefined && event.pointerId !== activePointerId) return;
 
-      let finalName = baseName + ".png";
-      let count = 2;
+        try {
+          if (handle.hasPointerCapture && handle.hasPointerCapture(activePointerId)) {
+            handle.releasePointerCapture(activePointerId);
+          }
+        } catch (error) {}
 
-      while (usedNames.has(finalName.toLowerCase())) {
-        finalName = baseName + "_" + count + ".png";
-        count++;
-      }
+        activePointerId = null;
+        card.draggable = true;
 
-      usedNames.add(finalName.toLowerCase());
-      return finalName;
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      };
+
+      handle.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        activePointerId = event.pointerId;
+        startX = event.clientX;
+        startY = event.clientY;
+        startZoom = item.zoom;
+        card.draggable = false;
+
+        if (handle.setPointerCapture) {
+          handle.setPointerCapture(event.pointerId);
+        }
+      });
+
+      handle.addEventListener("pointermove", onPointerMove);
+      handle.addEventListener("pointerup", finish);
+      handle.addEventListener("pointercancel", finish);
     }
 
     function addCard(item, index) {
-      const data = item.data;
       const card = document.createElement("div");
       card.className = "card";
       card.draggable = true;
       card.dataset.index = String(index);
 
+      const data = item.data;
       const matchLabel = getMatchLabel(item.matchType);
+      const zoomPercent = Math.round(item.zoom * 100);
 
       const mappingInfo = data
         ? `
@@ -1156,31 +1497,190 @@
         `;
 
       card.innerHTML = `
-        <div class="preview">
-          <img src="${item.url}" alt="${escapeHtml(item.outputName)}">
+        <div class="preview-shell">
+          <canvas class="preview-canvas"></canvas>
+          <div class="resize-handle" title="Giữ và kéo để phóng to / thu nhỏ">↘</div>
         </div>
+
+        <div class="zoom-control">
+          <div class="zoom-head">
+            <span>KÍCH THƯỚC LOGO</span>
+            <span class="zoom-value">${zoomPercent}%</span>
+          </div>
+
+          <div class="zoom-row">
+            <button type="button" class="zoom-minus" title="Thu nhỏ">−</button>
+            <input class="zoom-range" type="range" min="40" max="220" value="${zoomPercent}" step="1" />
+            <button type="button" class="zoom-plus" title="Phóng to">+</button>
+          </div>
+
+          <div class="zoom-actions">
+            <button type="button" class="zoom-fit">Về 100%</button>
+            <button type="button" class="zoom-small">90%</button>
+            <button type="button" class="zoom-large">110%</button>
+            <button type="button" class="zoom-large2">120%</button>
+          </div>
+
+          <div class="bg-title">NỀN BÊN TRONG VIỀN</div>
+
+          <div class="bg-actions">
+            <button type="button" class="bg-btn" data-bg-mode="auto">Tự động</button>
+            <button type="button" class="bg-btn" data-bg-mode="#ffffff">Trắng</button>
+            <button type="button" class="bg-btn" data-bg-mode="#000000">Đen</button>
+            <button type="button" class="bg-btn" data-bg-mode="transparent">Trong suốt</button>
+          </div>
+
+          <div class="zoom-help">
+            Bạn có thể tự đổi nền riêng cho từng logo.
+            Preview đổi ngay; file tải xuống cũng dùng đúng nền bạn chọn.
+          </div>
+
+          <div class="tone-box">
+            <span>Phân tích:</span>
+            <span class="tone-result">${escapeHtml(toneText(item))}</span>
+          </div>
+        </div>
+
         <div class="filename">${escapeHtml(item.outputName)}</div>
+
         <div class="info">
           ${mappingInfo}
           Tách nền: ${item.removeBg ? "Bật" : "Tắt"}<br>
+          Nền trong viền: <span class="inside-bg-value"></span><br>
+          Độ sáng logo: ${Math.round(item.tone.averageLuminance)}/255<br>
           Gốc: ${formatBytes(item.originalSize)}<br>
-          PNG: ${formatBytes(item.outputSize)}<br>
+          PNG: <span class="output-size-value">${formatBytes(item.outputSize)}</span><br>
           Size: ${item.size}×${item.size}<br>
+
           <span class="badge">PNG</span>
           ${item.removeBg ? '<span class="badge cut">Đã tách nền</span>' : ''}
           ${item.matchType === "manual_drag" ? '<span class="badge cut">Đã kéo đổi mã</span>' : ''}
-          ${item.matchType === "order_fallback" || item.matchType === "unmatched" ? '<span class="badge warn">Cần kiểm tra</span>' : ''}
+          ${["order_fallback", "unmatched"].includes(item.matchType) ? '<span class="badge warn">Cần kiểm tra</span>' : ''}
         </div>
-        <button type="button">Tải ảnh này</button>
+
+        <button type="button" class="download-one">Tải ảnh này</button>
       `;
 
-      const btn = card.querySelector("button");
-      btn.addEventListener("click", (event) => {
+      const canvas = card.querySelector(".preview-canvas");
+      const previewShell = card.querySelector(".preview-shell");
+      const resizeHandle = card.querySelector(".resize-handle");
+      const zoomControl = card.querySelector(".zoom-control");
+      const zoomRange = card.querySelector(".zoom-range");
+      const zoomMinus = card.querySelector(".zoom-minus");
+      const zoomPlus = card.querySelector(".zoom-plus");
+      const zoomFit = card.querySelector(".zoom-fit");
+      const zoomSmall = card.querySelector(".zoom-small");
+      const zoomLarge = card.querySelector(".zoom-large");
+      const zoomLarge2 = card.querySelector(".zoom-large2");
+      const downloadButton = card.querySelector(".download-one");
+      const bgButtons = card.querySelectorAll(".bg-btn");
+
+      renderPreview(item, canvas);
+      updateCardBackgroundButtons(card, item);
+      updateCardInsideBackgroundText(card, item);
+      setupResizeHandle(resizeHandle, item, card);
+
+      [zoomControl, previewShell].forEach((element) => {
+        element.addEventListener("mousedown", (event) => {
+          if (event.target !== canvas && !event.target.closest(".resize-handle")) {
+            event.stopPropagation();
+          }
+        });
+      });
+
+      zoomRange.addEventListener("pointerdown", (event) => {
         event.stopPropagation();
-        downloadFile(item.url, item.outputName);
+        card.draggable = false;
+      });
+
+      zoomRange.addEventListener("input", () => {
+        setItemZoom(item, Number(zoomRange.value), card, false);
+      });
+
+      zoomRange.addEventListener("change", async () => {
+        card.draggable = true;
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      zoomRange.addEventListener("pointerup", async () => {
+        card.draggable = true;
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      zoomMinus.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        setItemZoom(item, item.zoom * 100 - 5, card, false);
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      zoomPlus.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        setItemZoom(item, item.zoom * 100 + 5, card, false);
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      zoomFit.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        setItemZoom(item, 100, card, false);
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      zoomSmall.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        setItemZoom(item, 90, card, false);
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      zoomLarge.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        setItemZoom(item, 110, card, false);
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      zoomLarge2.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        setItemZoom(item, 120, card, false);
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      });
+
+      previewShell.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const direction = event.deltaY < 0 ? 3 : -3;
+        setItemZoom(item, item.zoom * 100 + direction, card, false);
+      }, { passive: false });
+
+      bgButtons.forEach((button) => {
+        button.addEventListener("click", async (event) => {
+          event.stopPropagation();
+          setItemBackgroundMode(item, button.dataset.bgMode, card, false);
+          await commitItem(item);
+          updateCardOutputSize(card, item);
+        });
+      });
+
+      downloadButton.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+        downloadBlob(item.blob, item.outputName);
       });
 
       card.addEventListener("dragstart", (event) => {
+        if (event.target.closest(".zoom-control") || event.target.closest(".resize-handle")) {
+          event.preventDefault();
+          return;
+        }
+
         draggedCardIndex = Number(card.dataset.index);
         card.classList.add("dragging");
         event.dataTransfer.effectAllowed = "move";
@@ -1189,14 +1689,15 @@
 
       card.addEventListener("dragend", () => {
         draggedCardIndex = null;
-        document.querySelectorAll(".card").forEach(el => {
-          el.classList.remove("dragging", "drag-over");
+        card.draggable = true;
+
+        document.querySelectorAll(".card").forEach((element) => {
+          element.classList.remove("dragging", "drag-over");
         });
       });
 
       card.addEventListener("dragover", (event) => {
         event.preventDefault();
-        event.dataTransfer.dropEffect = "move";
         card.classList.add("drag-over");
       });
 
@@ -1221,12 +1722,12 @@
     }
 
     function getMatchLabel(type) {
-      if (type === "headpic") return "Khớp mã HEADPIC trong tên file";
-      if (type === "avatar_exact") return "Khớp chính xác tên Avatar";
-      if (type === "avatar_contains") return "Tên file có chứa Avatar";
-      if (type === "team_contains") return "Tên file có chứa Team";
-      if (type === "manual_drag") return "Đã kéo thả để đổi mã HEADPIC";
-      if (type === "order_fallback") return "<span class='warning'>Không khớp tên, tạm dùng thứ tự</span>";
+      if (type === "headpic") return "Khớp mã HEADPIC";
+      if (type === "avatar_exact") return "Khớp chính xác Avatar";
+      if (type === "avatar_contains") return "Tên file chứa Avatar";
+      if (type === "team_contains") return "Tên file chứa Team";
+      if (type === "manual_drag") return "Đã kéo đổi mã HEADPIC";
+      if (type === "order_fallback") return "<span class='warning'>Tạm dùng thứ tự</span>";
       return "<span class='warning'>Không khớp</span>";
     }
 
@@ -1245,12 +1746,7 @@
       reassignHeadpicsByCurrentOrder();
       rerenderProcessedCards();
 
-      summaryText.innerHTML =
-        "Đã đổi vị trí. Ảnh ở dòng <b>" +
-        (toIndex + 1) +
-        "</b> sẽ dùng mã <b>" +
-        escapeHtml(processedImages[toIndex].outputName) +
-        "</b>. Khi tải ZIP, tên file sẽ theo thứ tự mới.";
+      summaryText.innerHTML = `Đã đổi vị trí. Ảnh ở dòng <b>${toIndex + 1}</b> dùng mã <b>${escapeHtml(processedImages[toIndex].outputName)}</b>.`;
     }
 
     function reassignHeadpicsByCurrentOrder() {
@@ -1258,22 +1754,14 @@
 
       processedImages.forEach((item, index) => {
         const newData = headpicData[index] || null;
-
-        if (newData) {
-          item.data = newData;
-          item.outputName = makeOutputName(item.originalName, index, newData, usedNames);
-          item.matchType = "manual_drag";
-        } else {
-          item.data = null;
-          item.outputName = makeOutputName(item.originalName, index, null, usedNames);
-          item.matchType = "unmatched";
-        }
+        item.data = newData;
+        item.outputName = makeOutputName(item.originalName, index, newData, usedNames);
+        item.matchType = newData ? "manual_drag" : "unmatched";
       });
 
       sourceItems.forEach((item, index) => {
-        const newData = headpicData[index] || null;
-        item.data = newData;
-        item.matchType = newData ? "manual_drag" : "unmatched";
+        item.data = headpicData[index] || null;
+        item.matchType = item.data ? "manual_drag" : "unmatched";
       });
     }
 
@@ -1288,37 +1776,31 @@
     }
 
     async function downloadZip() {
-      if (processedImages.length === 0) {
+      if (!processedImages.length) {
         alert("Chưa có ảnh đã xử lý.");
         return;
       }
 
       downloadAllBtn.disabled = true;
       downloadAllBtn.textContent = "Đang tạo file nén...";
-      summaryText.textContent = "Đang đóng gói " + processedImages.length + " ảnh PNG vào file nén...";
 
       try {
-        const files = processedImages.map(item => ({
+        await commitAllDirtyImages();
+
+        const files = processedImages.map((item) => ({
           name: item.outputName,
           blob: item.blob
         }));
 
         const zipBlob = await createZip(files);
-        const zipUrl = URL.createObjectURL(zipBlob);
         const zipName = sanitizeZipName(zipNameInput.value || "headpic_resize_png") + ".zip";
 
-        downloadFile(zipUrl, zipName);
+        downloadBlob(zipBlob, zipName);
 
-        setTimeout(() => URL.revokeObjectURL(zipUrl), 10000);
-
-        summaryText.innerHTML =
-          "Đã tạo xong file nén <b>" +
-          escapeHtml(zipName) +
-          "</b> chứa <b>" +
-          processedImages.length +
-          "</b> ảnh PNG. File này mở được bằng WinRAR.";
+        summaryText.innerHTML = `Đã tạo <b>${escapeHtml(zipName)}</b> chứa <b>${processedImages.length}</b> ảnh.`;
       } catch (error) {
-        alert("Không thể tạo file nén: " + error.message);
+        console.error(error);
+        alert("Không thể tạo ZIP: " + error.message);
       } finally {
         downloadAllBtn.disabled = false;
         downloadAllBtn.textContent = "TẢI XUỐNG";
@@ -1432,98 +1914,397 @@
     function getDosDateTime(date) {
       const year = Math.max(1980, date.getFullYear());
 
-      const dosTime =
-        (date.getHours() << 11) |
-        (date.getMinutes() << 5) |
-        Math.floor(date.getSeconds() / 2);
+      return {
+        time: (date.getHours() << 11) | (date.getMinutes() << 5) | Math.floor(date.getSeconds() / 2),
+        date: ((year - 1980) << 9) | ((date.getMonth() + 1) << 5) | date.getDate()
+      };
+    }
 
-      const dosDate =
-        ((year - 1980) << 9) |
-        ((date.getMonth() + 1) << 5) |
-        date.getDate();
+    function detectForegroundBounds(canvas, threshold, removeBg) {
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      const width = canvas.width;
+      const height = canvas.height;
+      const data = ctx.getImageData(0, 0, width, height).data;
+
+      if (removeBg) {
+        const alphaBounds = getBoundsByAlpha(data, width, height, 14);
+
+        if (alphaBounds) {
+          return expandBounds(alphaBounds, width, height, 0.025);
+        }
+      }
+
+      const existingAlphaBounds = getBoundsByAlphaIfMeaningful(data, width, height, 14);
+
+      if (existingAlphaBounds) {
+        return expandBounds(existingAlphaBounds, width, height, 0.025);
+      }
+
+      const differenceBounds = getBoundsByBackgroundDifference(
+        data,
+        width,
+        height,
+        clampNumber(Math.round(threshold * 0.82), 14, 90, 34)
+      );
+
+      if (differenceBounds) {
+        const area = (differenceBounds.maxX - differenceBounds.minX + 1) * (differenceBounds.maxY - differenceBounds.minY + 1);
+        const total = width * height;
+
+        if (area > total * 0.002 && area < total * 0.985) {
+          return expandBounds(differenceBounds, width, height, 0.035);
+        }
+      }
 
       return {
-        time: dosTime,
-        date: dosDate
+        minX: 0,
+        minY: 0,
+        maxX: width - 1,
+        maxY: height - 1
       };
+    }
+
+    function getBoundsByAlpha(data, width, height, alphaThreshold) {
+      let minX = width;
+      let minY = height;
+      let maxX = -1;
+      let maxY = -1;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const i = (y * width + x) * 4;
+
+          if (data[i + 3] > alphaThreshold) {
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      if (maxX < 0) return null;
+
+      return { minX, minY, maxX, maxY };
+    }
+
+    function getBoundsByAlphaIfMeaningful(data, width, height, alphaThreshold) {
+      const bounds = getBoundsByAlpha(data, width, height, alphaThreshold);
+
+      if (!bounds) return null;
+
+      const area = (bounds.maxX - bounds.minX + 1) * (bounds.maxY - bounds.minY + 1);
+      const totalArea = width * height;
+
+      return area < totalArea * 0.965 ? bounds : null;
+    }
+
+    function getBoundsByBackgroundDifference(data, width, height, threshold) {
+      const samples = getBackgroundSamples(data, width, height);
+
+      let minX = width;
+      let minY = height;
+      let maxX = -1;
+      let maxY = -1;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const pixelIndex = y * width + x;
+          const i = pixelIndex * 4;
+
+          if (data[i + 3] < 10) continue;
+
+          if (!isBackgroundPixel(data, pixelIndex, samples, threshold)) {
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      if (maxX < 0) return null;
+
+      return { minX, minY, maxX, maxY };
+    }
+
+    function expandBounds(bounds, width, height, ratio) {
+      const boxWidth = bounds.maxX - bounds.minX + 1;
+      const boxHeight = bounds.maxY - bounds.minY + 1;
+      const padding = Math.round(Math.max(boxWidth, boxHeight) * ratio);
+
+      return {
+        minX: Math.max(0, bounds.minX - padding),
+        minY: Math.max(0, bounds.minY - padding),
+        maxX: Math.min(width - 1, bounds.maxX + padding),
+        maxY: Math.min(height - 1, bounds.maxY + padding)
+      };
+    }
+
+    function removeBackgroundFromCanvas(canvas, threshold, feather) {
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      const width = canvas.width;
+      const height = canvas.height;
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const data = imageData.data;
+      const bgSamples = getBackgroundSamples(data, width, height);
+      const visited = new Uint8Array(width * height);
+      const removeMask = new Uint8Array(width * height);
+      const queue = [];
+
+      function visit(index) {
+        if (index < 0 || index >= visited.length) return;
+        if (visited[index]) return;
+        visited[index] = 1;
+        queue.push(index);
+      }
+
+      function seed(x, y) {
+        visit(y * width + x);
+      }
+
+      seed(0, 0);
+      seed(width - 1, 0);
+      seed(0, height - 1);
+      seed(width - 1, height - 1);
+
+      const stepX = Math.max(1, Math.floor(width / 24));
+      const stepY = Math.max(1, Math.floor(height / 24));
+
+      for (let x = 0; x < width; x += stepX) {
+        seed(x, 0);
+        seed(x, height - 1);
+      }
+
+      for (let y = 0; y < height; y += stepY) {
+        seed(0, y);
+        seed(width - 1, y);
+      }
+
+      let head = 0;
+      let removed = 0;
+
+      while (head < queue.length) {
+        const index = queue[head++];
+        const x = index % width;
+        const y = Math.floor(index / width);
+
+        if (!isBackgroundPixel(data, index, bgSamples, threshold)) continue;
+
+        removeMask[index] = 1;
+        removed++;
+
+        if (x > 0) visit(index - 1);
+        if (x < width - 1) visit(index + 1);
+        if (y > 0) visit(index - width);
+        if (y < height - 1) visit(index + width);
+      }
+
+      for (let i = 0; i < removeMask.length; i++) {
+        if (removeMask[i]) data[i * 4 + 3] = 0;
+      }
+
+      if (feather > 0) {
+        softenEdges(data, width, height, removeMask, feather);
+      }
+
+      decontaminateEdges(data, width, height, bgSamples, removeMask);
+
+      ctx.putImageData(imageData, 0, 0);
+
+      return removed;
+    }
+
+    function getBackgroundSamples(data, width, height) {
+      const points = [
+        [0, 0],
+        [width - 1, 0],
+        [0, height - 1],
+        [width - 1, height - 1],
+        [Math.floor(width / 2), 0],
+        [Math.floor(width / 2), height - 1],
+        [0, Math.floor(height / 2)],
+        [width - 1, Math.floor(height / 2)]
+      ];
+
+      return points.map(([x, y]) => {
+        const i = (y * width + x) * 4;
+        return [data[i], data[i + 1], data[i + 2], data[i + 3]];
+      });
+    }
+
+    function isBackgroundPixel(data, index, samples, threshold) {
+      const i = index * 4;
+      const alpha = data[i + 3];
+
+      if (alpha < 10) return true;
+
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      for (const sample of samples) {
+        if (sample[3] !== undefined && sample[3] < 10) {
+          continue;
+        }
+
+        if (colorDistance(r, g, b, sample[0], sample[1], sample[2]) <= threshold) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    function colorDistance(r1, g1, b1, r2, g2, b2) {
+      return Math.hypot(r1 - r2, g1 - g2, b1 - b2);
+    }
+
+    function softenEdges(data, width, height, removeMask, feather) {
+      const radius = Math.min(feather, 30);
+      if (!radius) return;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const index = y * width + x;
+
+          if (removeMask[index]) continue;
+
+          let nearest = radius + 1;
+
+          for (let dy = -radius; dy <= radius; dy++) {
+            const yy = y + dy;
+            if (yy < 0 || yy >= height) continue;
+
+            for (let dx = -radius; dx <= radius; dx++) {
+              const xx = x + dx;
+              if (xx < 0 || xx >= width) continue;
+
+              const neighborIndex = yy * width + xx;
+
+              if (!removeMask[neighborIndex]) continue;
+
+              const distance = Math.hypot(dx, dy);
+
+              if (distance < nearest) nearest = distance;
+            }
+          }
+
+          if (nearest <= radius) {
+            const alphaIndex = index * 4 + 3;
+            const keep = Math.min(1, nearest / radius);
+
+            data[alphaIndex] = Math.round(data[alphaIndex] * Math.max(0.25, keep));
+          }
+        }
+      }
+    }
+
+    function decontaminateEdges(data, width, height, samples, removeMask) {
+      const bg = averageColor(samples);
+
+      for (let index = 0; index < width * height; index++) {
+        if (removeMask[index]) continue;
+
+        const alpha = data[index * 4 + 3];
+        if (alpha === 255) continue;
+
+        const i = index * 4;
+        const mix = (255 - alpha) / 255;
+        const keep = Math.max(0.15, 1 - mix);
+
+        data[i] = clampByte((data[i] - bg[0] * mix) / keep);
+        data[i + 1] = clampByte((data[i + 1] - bg[1] * mix) / keep);
+        data[i + 2] = clampByte((data[i + 2] - bg[2] * mix) / keep);
+      }
+    }
+
+    function averageColor(samples) {
+      const opaqueSamples = samples.filter((sample) => sample[3] === undefined || sample[3] >= 10);
+      const usableSamples = opaqueSamples.length ? opaqueSamples : samples;
+
+      const sum = usableSamples.reduce(
+        (acc, sample) => [
+          acc[0] + sample[0],
+          acc[1] + sample[1],
+          acc[2] + sample[2]
+        ],
+        [0, 0, 0]
+      );
+
+      return [
+        sum[0] / usableSamples.length,
+        sum[1] / usableSamples.length,
+        sum[2] / usableSamples.length
+      ];
+    }
+
+    function clampByte(value) {
+      return Math.max(0, Math.min(255, Math.round(value)));
+    }
+
+    function makeOutputName(originalName, index, data, usedNames) {
+      let baseName = data
+        ? cleanNamePart(data.headpic || "")
+        : originalName.replace(/\.[^/.]+$/, "").trim() || `image_${index + 1}`;
+
+      baseName = sanitizeFileName(baseName);
+
+      let finalName = baseName + ".png";
+      let count = 2;
+
+      while (usedNames.has(finalName.toLowerCase())) {
+        finalName = `${baseName}_${count++}.png`;
+      }
+
+      usedNames.add(finalName.toLowerCase());
+      return finalName;
     }
 
     function renderMappingTable() {
       mappingTable.innerHTML = "";
 
-      // Quan trọng:
-      // Bảng này KHÔNG còn hiển thị team cũ cố định trong code nữa.
-      // Nó sẽ đọc tên ảnh/team từ chính các file mới bạn vừa tải lên.
-      if (sourceItems.length === 0) {
-        return;
-      }
-
       sourceItems.forEach((item, index) => {
-        const tr = document.createElement("tr");
-        tr.classList.add("active-row");
+        const row = document.createElement("tr");
+        row.className = "active-row";
 
         const data = item.data;
-        const displayTeam = item.displayTeam || getDisplayTeamFromFileName(item.file.name, data);
 
-        tr.innerHTML = `
+        row.innerHTML = `
           <td>${index + 1}</td>
-          <td>${escapeHtml(displayTeam || "-")}</td>
+          <td>${escapeHtml(item.displayTeam || getDisplayTeamFromFileName(item.file.name, data) || "-")}</td>
           <td>${data ? escapeHtml(data.avatar || "-") : "-"}</td>
           <td>${data ? escapeHtml(data.headpic || "-") : "-"}</td>
         `;
 
-        mappingTable.appendChild(tr);
+        mappingTable.appendChild(row);
       });
     }
 
     function updateSummary() {
       const totalOriginal = processedImages.reduce((sum, item) => sum + item.originalSize, 0);
       const totalOutput = processedImages.reduce((sum, item) => sum + item.outputSize, 0);
-      const exactCount = processedImages.filter(item => item.matchType !== "order_fallback" && item.matchType !== "unmatched").length;
-      const fallbackCount = processedImages.filter(item => item.matchType === "order_fallback").length;
-      const unmatchedCount = processedImages.filter(item => item.matchType === "unmatched").length;
-      const cutCount = processedImages.filter(item => item.removeBg).length;
-
-      let extra =
-        " Đọc đúng theo tên file: <b>" + exactCount + "</b> ảnh.";
-
-      if (cutCount > 0) {
-        extra += " Đã bật tách nền: <b>" + cutCount + "</b> ảnh.";
-      }
-
-      if (fallbackCount > 0) {
-        extra += " <span class='warning'>Tạm dùng thứ tự: " + fallbackCount + " ảnh.</span>";
-      }
-
-      if (unmatchedCount > 0) {
-        extra += " <span class='warning'>Không khớp mapping: " + unmatchedCount + " ảnh.</span>";
-      }
+      const darkCount = processedImages.filter((item) => item.tone.kind === "dark").length;
+      const lightCount = processedImages.filter((item) => item.tone.kind === "light").length;
 
       summaryText.innerHTML =
-        "Hoàn tất <b>" +
-        processedImages.length +
-        "</b> ảnh. Dung lượng gốc: <b>" +
-        formatBytes(totalOriginal) +
-        "</b>. Sau khi xuất PNG: <b>" +
-        formatBytes(totalOutput) +
-        "</b>." +
-        extra;
+        `Hoàn tất <b>${processedImages.length}</b> ảnh. ` +
+        `Logo tối: <b>${darkCount}</b> · ` +
+        `Logo sáng: <b>${lightCount}</b>. ` +
+        `Gốc: <b>${formatBytes(totalOriginal)}</b> · ` +
+        `PNG: <b>${formatBytes(totalOutput)}</b>.`;
     }
 
     function updateEmptyText() {
-      if (sourceItems.length === 0 && processedImages.length === 0) {
+      if (!sourceItems.length && !processedImages.length) {
         emptyText.style.display = "block";
         emptyText.textContent = "Chưa có ảnh nào.";
-      } else if (sourceItems.length > 0 && processedImages.length === 0) {
+      } else if (sourceItems.length && !processedImages.length) {
         emptyText.style.display = "block";
-        emptyText.textContent = "Đã có ảnh chờ xử lý. Bấm Resize, tách nền & chuyển PNG hoặc KHÔNG TÁCH NỀN.";
+        emptyText.textContent = "Đã có ảnh chờ xử lý.";
       } else {
         emptyText.style.display = "none";
       }
-    }
-
-    function clearProcessedUrls() {
-      processedImages.forEach(item => URL.revokeObjectURL(item.url));
     }
 
     function clampNumber(value, min, max, fallback) {
@@ -1560,12 +2341,14 @@
     }
 
     function sanitizeZipName(name) {
-      return String(name)
-        .replace(/[\\/:*?"<>|]/g, "_")
-        .replace(/\s+/g, "_")
-        .replace(/_+/g, "_")
-        .trim()
-        .replace(/\.zip$/i, "") || "headpic_resize_png";
+      return (
+        String(name)
+          .replace(/[\\/:*?"<>|]/g, "_")
+          .replace(/\s+/g, "_")
+          .replace(/_+/g, "_")
+          .trim()
+          .replace(/\.zip$/i, "") || "headpic_resize_png"
+      );
     }
 
     function copyTextFallback(text) {
@@ -1573,27 +2356,31 @@
       textarea.value = text;
       textarea.style.position = "fixed";
       textarea.style.left = "-9999px";
-      textarea.style.top = "-9999px";
 
       document.body.appendChild(textarea);
-      textarea.focus();
       textarea.select();
       document.execCommand("copy");
-      document.body.removeChild(textarea);
+      textarea.remove();
     }
 
-    function downloadFile(url, filename) {
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
 
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      link.href = url;
+      link.download = filename;
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 10000);
     }
 
     function formatBytes(bytes) {
-      if (bytes === 0) return "0 B";
+      if (!bytes) return "0 B";
 
       const units = ["B", "KB", "MB", "GB"];
       const index = Math.floor(Math.log(bytes) / Math.log(1024));
