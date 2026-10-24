@@ -8,8 +8,8 @@
   const status = document.getElementById('driveStatus');
   const progress = document.getElementById('driveProgress');
   let controller = null;
-  const MAX_BYTES = 30 * 1024 * 1024;
-  const isLocal = location.protocol === 'http:' && ['127.0.0.1','localhost'].includes(location.hostname);
+  let MAX_BYTES = 30 * 1024 * 1024;
+  const canUseDrive = location.protocol === 'http:' || location.protocol === 'https:';
   const message = text => {status.textContent = text;};
   function parseFolder(value) {
     let url;
@@ -29,7 +29,7 @@
     catch(error) {
       if(signal.aborted) throw new DOMException('Đã hủy','AbortError');
       if(error.name === 'TimeoutError') throw new Error('Google Drive phản hồi quá lâu. Hãy thử lại.');
-      throw new Error('Không kết nối được Google Drive. Kiểm tra mạng và mở công cụ bằng MO-CONG-CU.cmd.');
+      throw new Error('Không kết nối được Google Drive. Kiểm tra mạng rồi thử lại.');
     }
     if(!response.ok) {
       let error = {};try {error = (await response.json()).error || {};} catch {}
@@ -62,7 +62,8 @@
     return [...files.values()];
   }
   async function downloadImage(file,signal) {
-    if(Number(file.size)>MAX_BYTES) throw new Error('Ảnh vượt quá giới hạn 30 MB.');
+    const tooLarge = 'Ảnh vượt quá giới hạn ' + Math.round(MAX_BYTES / 1024 / 1024) + ' MB của phiên bản này.';
+    if(Number(file.size)>MAX_BYTES) throw new Error(tooLarge);
     // Read the public original through our own local server to avoid Drive media CORS blocks.
     const url = new URL('/api/drive/image',location.origin);
     url.searchParams.set('id',file.id);
@@ -71,18 +72,18 @@
     try {response = await fetch(url,{signal:AbortSignal.any([signal,AbortSignal.timeout(60000)])});}
     catch(error) {
       if(signal.aborted) throw new DOMException('Đã hủy','AbortError');
-      throw new Error('Không kết nối được công cụ tải ảnh. Hãy mở lại MO-CONG-CU.cmd.');
+      throw new Error('Không kết nối được bộ tải ảnh. Hãy tải lại trang rồi thử lại.');
     }
     if(!response.ok) {
       let error;try {error=(await response.json()).error;} catch {}
       throw new Error(error || 'Không tải được ảnh từ Drive (HTTP ' + response.status + ').');
     }
     if(!response.headers.get('content-type')?.startsWith('image/')) throw new Error('Drive không trả về nội dung ảnh.');
-    if(Number(response.headers.get('content-length'))>MAX_BYTES) {await response.body.cancel();throw new Error('Ảnh vượt quá giới hạn 30 MB.');}
+    if(Number(response.headers.get('content-length'))>MAX_BYTES) {await response.body.cancel();throw new Error(tooLarge);}
     const reader = response.body.getReader();const chunks=[];let bytes=0;
     while(true) {
       const {value,done} = await reader.read();if(done) break;
-      bytes+=value.byteLength;if(bytes>MAX_BYTES) {await reader.cancel();throw new Error('Ảnh vượt quá giới hạn 30 MB.');}
+      bytes+=value.byteLength;if(bytes>MAX_BYTES) {await reader.cancel();throw new Error(tooLarge);}
       chunks.push(value);
     }
     if(!bytes) throw new Error('Ảnh rỗng.');
@@ -92,10 +93,11 @@
   }
   cancelButton.onclick = () => controller?.abort();
   loadButton.onclick = async () => {
+    await configReady;
     let folder;const apiKey = keyInput.value.trim();
     try {folder=parseFolder(folderInput.value);} catch(error) {message(error.message);return;}
-    if(!isLocal) {message('Để dùng Drive với API Key đã cấu hình, hãy mở tệp MO-CONG-CU.cmd rồi dán lại link tại trang công cụ.');return;}
-    if(!apiKey) {message('Chưa đọc được cấu hình Google Drive. Hãy mở lại MO-CONG-CU.cmd hoặc tải lại trang.');return;}
+    if(!canUseDrive) {message('Hãy mở công cụ trên website hoặc mở MO-CONG-CU.cmd để nạp Drive.');return;}
+    if(!apiKey) {message('Chưa đọc được cấu hình Google Drive. Hãy tải lại trang hoặc kiểm tra cấu hình website.');return;}
     const run = new AbortController();controller=run;
     loadButton.disabled=true;cancelButton.hidden=false;keyInput.disabled=true;folderInput.disabled=true;
     const lockIds=['processBtn','processNoBgBtn','resetAllBtn','clearBtn','downloadAllBtn','downloadOriginalBtn','downloadTeamsBtn','downloadEachBtn','fileInput'];
@@ -124,7 +126,8 @@
       progress.hidden=true;locked.forEach(({element,disabled})=>{element.disabled=disabled;});
     }
   };
-  if(isLocal) fetch('/api/drive-config').then(r=>r.ok?r.json():{}).then(config=>{
+  const configReady = canUseDrive ? fetch('/api/drive-config').then(r=>r.ok?r.json():{}).then(config=>{
     if(config.apiKey && !keyInput.value) keyInput.value=config.apiKey;
-  }).catch(()=>{});
+    if(Number(config.maxImageBytes)>0) MAX_BYTES=Number(config.maxImageBytes);
+  }).catch(()=>{}) : Promise.resolve();
 })();

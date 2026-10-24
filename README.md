@@ -2,6 +2,12 @@
 
 Công cụ xử lý logo hàng loạt, chạy trên máy qua trình duyệt.
 
+## Dùng trên website
+
+Mở https://codelogolevit.vercel.app/, dán link thư mục Google Drive rồi bấm **NẠP LOGO TỪ DRIVE**. Phiên bản online không cần chạy tệp CMD. Bộ tải ảnh chạy bằng Vercel Functions trong thư mục `api/`.
+
+Ảnh nạp từ Drive trên Vercel tối đa 4 MB mỗi ảnh; bản chạy trên máy vẫn hỗ trợ 30 MB. Có thể chọn ảnh lớn trực tiếp từ máy để xử lý trên trình duyệt.
+
 ## Cách mở
 
 1. Cài Node.js nếu máy chưa có.
@@ -28,6 +34,6 @@ Kho này có kèm tệp cấu hình API theo yêu cầu của chủ công cụ.
 
 Dán link thư mục rồi bấm **NẠP LOGO TỪ DRIVE**. Thư mục và ảnh cần quyền xem/tải công khai bằng đường liên kết. Công cụ đọc ảnh trực tiếp trong thư mục, không duyệt thư mục con; giới hạn 30 MB mỗi ảnh và 1000 ảnh mỗi thư mục.
 
-Ảnh gốc tải từ Google qua bộ tải cục bộ để tránh lỗi đọc ảnh khác miền trong trình duyệt.
+Ảnh gốc tải từ Google qua bộ tải của website hoặc bộ tải cục bộ để tránh lỗi đọc ảnh khác miền trong trình duyệt.
 
 Xem thêm `HUONG-DAN.txt`. Mở trực tiếp `index.html` vẫn chọn ảnh từ máy được; chức năng Drive cần mở qua `MO-CONG-CU.cmd`.

@@ -4,7 +4,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const HOST = '127.0.0.1:18764';
 const assets = new Map([['/','index.html'],['/index.html','index.html'],['/drive-import.js','drive-import.js']]);
-async function downloadPublicImage(id, resourceKey, signal, fetchImpl) {
+async function downloadPublicImage(id, resourceKey, signal, fetchImpl, maxBytes = 30 * 1024 * 1024) {
   let url = new URL('https://drive.usercontent.google.com/download');
   url.searchParams.set('id',id);url.searchParams.set('export','download');
   if(resourceKey) url.searchParams.set('resourcekey',resourceKey);
@@ -28,11 +28,12 @@ async function downloadPublicImage(id, resourceKey, signal, fetchImpl) {
       await response.body?.cancel();
       throw new Error('Google chưa cho tải ảnh gốc. Kiểm tra quyền xem/tải công khai và giới hạn tải của Drive.');
     }
-    const limit = 30 * 1024 * 1024;
-    if(Number(response.headers.get('content-length'))>limit) {await response.body.cancel();throw new Error('Ảnh vượt quá giới hạn 30 MB.');}
+    const limit = maxBytes;
+    const tooLarge = 'Ảnh vượt quá giới hạn ' + Math.round(limit / 1024 / 1024) + ' MB của bộ tải này.';
+    if(Number(response.headers.get('content-length'))>limit) {await response.body.cancel();throw new Error(tooLarge);}
     let bytes=0;const chunks=[];
     for await(const chunk of response.body) {
-      bytes+=chunk.length;if(bytes>limit) throw new Error('Ảnh vượt quá giới hạn 30 MB.');
+      bytes+=chunk.length;if(bytes>limit) throw new Error(tooLarge);
       chunks.push(chunk);
     }
     if(!bytes) throw new Error('Google trả về ảnh rỗng.');
@@ -96,4 +97,4 @@ if(require.main === module) {
   server.on('error',error=>{if(error.code!=='EADDRINUSE')console.error(error.message);process.exit(error.code==='EADDRINUSE'?0:1);});
   server.listen(18764,'127.0.0.1',()=>console.log('HD CODE LOGO: http://' + HOST));
 }
-module.exports = {createServer};
+module.exports = {createServer, downloadPublicImage};
