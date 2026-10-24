@@ -1,0 +1,28 @@
+HD CODE LOGO — NẠP LOGO TỪ GOOGLE DRIVE
+
+1. Bấm đúp MO-CONG-CU.cmd trong thư mục công cụ.
+2. Trình duyệt mở http://127.0.0.1:18764/.
+3. Dán link thư mục Drive rồi bấm NẠP LOGO TỪ DRIVE.
+4. Chờ tải xong, bấm TÁCH NỀN hoặc KHÔNG TÁCH NỀN để chỉnh logo.
+5. Kéo trái/phải, chỉnh zoom và nền như trước; tải PNG hoặc ZIP giữ tên team.
+
+CÁC TỆP CẦN GIỮ CÙNG THƯ MỤC
+index.html, drive-import.js, drive-server.cjs, MO-CONG-CU.cmd.
+drive-settings.json là cấu hình riêng trên máy bạn, chứa API Key đã nhập.
+Bản tải về không kèm khóa. Nếu chuyển sang máy khác, đặt API Key trong drive-settings.json.
+
+YÊU CẦU
+Máy có Node.js (máy hiện tại đã có), không cần cài thêm thư viện.
+Google Drive API phải được bật trong dự án Google Cloud của khóa.
+API restrictions: chỉ cho phép Google Drive API.
+Nếu dùng Websites restriction: cho phép http://127.0.0.1:18764/*.
+Thư mục/ảnh phải có quyền xem và tải công khai bằng đường liên kết.
+
+LƯU Ý SỬ DỤNG
+Chỉ nạp ảnh trực tiếp trong thư mục, không duyệt thư mục con.
+Giới hạn 30 MB/ảnh và 1000 ảnh/thư mục. Có nút Hủy tải.
+Nếu một ảnh bị lỗi, các ảnh tải thành công vẫn được nạp; trang báo tên ảnh bị lỗi.
+Ảnh gốc tải từ Google qua công cụ trên máy bạn, giữ tên tệp trên Drive.
+Không cần đưa công cụ lên website hoặc cài tiện ích tắt bảo mật trình duyệt.
+Các logo mới cần được xử lý bằng TÁCH NỀN/KHÔNG TÁCH NỀN trước khi xuất.
+Mở trực tiếp index.html vẫn chọn ảnh từ máy được. Để nạp Drive, mở MO-CONG-CU.cmd.

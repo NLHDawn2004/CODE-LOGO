@@ -485,6 +485,47 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+    .preview-canvas { cursor: ew-resize; touch-action: none; user-select: none; }
+    .preview-canvas.position-dragging { cursor: grabbing; }
+    .position-range { width: 100%; margin: 10px 0; }
+    .download-one-team { width: 100%; margin-top: 8px; background: #285b79; }
+
+    .drive-panel { margin: 20px 0; padding: 18px; border: 1px solid #365653; border-radius: 16px; background: #131e1c; }
+    .drive-panel h2 { margin: 0 0 14px; font-size: 18px; }
+    .drive-fields { display:grid; grid-template-columns: 1fr; gap:14px; }
+    .drive-panel input[type="url"], .drive-panel input[type="password"] { width:100%; padding:11px; border:1px solid #404649; border-radius:10px; background:#0d0f10; color:white; }
+    .drive-actions { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; }
+    #driveStatus { color:#c7dcd7; white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.6; font-size:14px; }
+    #driveProgress { width:100%; accent-color:#19b89f; }
+    @media(max-width:650px) { .drive-fields { grid-template-columns:1fr; } }
+    .remove-bg-actions button.active { background:#147869; color:#fff; box-shadow:inset 0 0 0 1px #26d6b8; }
+    .preview-bg-status { margin:8px 0 14px; }
+
+    /* Compact preview cards; every control remains available. */
+    .grid { grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; }
+    .card { padding:10px; align-self:start; cursor:default; }
+    .preview-shell { width:180px; max-width:100%; margin:0 auto; border-radius:10px; }
+    .editor { margin-top:8px; padding:8px; }
+    .editor .bg-title { margin-top:0; font-size:11px; }
+    .editor .zoom-head { margin:8px 0 4px; font-size:11px; }
+    .editor .zoom-row { gap:6px; grid-template-columns:30px minmax(0,1fr) 30px; }
+    .editor .zoom-row button { width:30px; height:28px; }
+    .editor .zoom-actions { gap:5px; margin-top:5px; }
+    .editor .zoom-actions button,.editor .bg-actions button { padding:6px 4px; min-height:28px; }
+    .editor .remove-bg-actions { grid-template-columns:1fr 1fr; }
+    .editor .remove-bg-actions button { white-space:nowrap; font-size:10px; }
+    .preview-bg-status:empty { display:none; }
+    .preview-bg-status { margin:5px 0; }
+    .advanced-controls { margin-top:8px; border-top:1px solid #303538; }
+    .logo-details>summary { padding:8px 0; color:#aabebc; font-size:11px; cursor:pointer; }
+    .advanced-controls .zoom-actions:has(>.position-center) { grid-template-columns:1fr; }
+    .advanced-controls .bg-title { margin-top:8px; }
+    .advanced-controls .zoom-help { font-size:10px; }
+    .card .filename { margin:7px 0 0; font-size:12px; cursor:grab; }
+    .logo-details { margin:0 0 5px; }
+    .logo-details .info { margin:0 0 5px; font-size:11px; }
+    .card-downloads { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+    .card-downloads button { width:100%; margin:0; padding:8px 3px; min-height:34px; font-size:11px; }
   </style>
 </head>
 
@@ -501,7 +542,7 @@
 
     Các chế độ xử lý bình thường vẫn hỗ trợ
     nền tự động / trắng / đen / trong suốt
-    và chỉnh kích thước từng logo.
+    và chỉnh kích thước, kéo trái/phải từng logo.
   </div>
 
   <div class="drop-zone" id="dropZone">
@@ -514,6 +555,20 @@
       multiple
     >
   </div>
+
+
+  <section class="drive-panel" aria-labelledby="driveTitle">
+    <h2 id="driveTitle">NẠP LOGO TỪ GOOGLE DRIVE</h2>
+    <div class="drive-fields">
+      <div class="field"><label for="driveFolderInput">Link thư mục có sẵn logo</label>
+        <input type="url" id="driveFolderInput" placeholder="Nhập link Driver tại đây"></div>
+      <input type="hidden" id="driveApiKey" autocomplete="off">
+    </div>
+    <div class="drive-actions"><button type="button" id="loadDriveBtn">NẠP LOGO TỪ DRIVE</button>
+      <button type="button" id="cancelDriveBtn" class="secondary" hidden>Hủy tải</button></div>
+    <progress id="driveProgress" hidden aria-label="Tiến độ tải logo"></progress>
+    <div id="driveStatus" role="status" aria-live="polite">Dán link thư mục được chia sẻ quyền xem. Logo tải về sẽ giữ nguyên tên tệp trên Drive.</div>
+  </section>
 
   <div class="settings">
 
@@ -642,6 +697,8 @@
     <button id="downloadAllBtn">
       TẢI XUỐNG
     </button>
+
+    <button id="downloadTeamsBtn">TẢI ZIP GIỮ TÊN TEAM</button>
 
     <button
       class="keep-btn"
@@ -1918,6 +1975,8 @@ async function createProcessedItem({
 
   const item = {
 
+    sourceFile: source.file,
+
     originalName:
       source.file.name,
 
@@ -1972,6 +2031,10 @@ async function createProcessedItem({
         : defaultMode,
 
     tone,
+
+    borderWidth: 40,
+
+    offsetX: 0,
 
     zoom:
       1,
@@ -2064,7 +2127,7 @@ function readImageFile(
 ========================= */
 
 function getFrame(
-  size
+  size, borderWidth = null, outputSize = size
 ) {
 
   const center =
@@ -2073,11 +2136,9 @@ function getFrame(
   const outerRadius =
     size * 0.472;
 
-  const ringThickness =
-    Math.max(
-      3,
-      size * 0.012
-    );
+  const ringThickness = borderWidth === null
+    ? 40 * size / outputSize
+    : borderWidth * size / outputSize;
 
   const ringRadius =
     outerRadius -
@@ -2085,8 +2146,8 @@ function getFrame(
 
   const clipRadius =
     outerRadius -
-    ringThickness -
-    size * 0.006;
+    ringThickness +
+    Math.min(1, ringThickness / 2);
 
   const safeRadius =
     clipRadius -
@@ -2132,7 +2193,7 @@ function renderComposite(
 
   const frame =
     getFrame(
-      size
+      size, item.borderWidth ?? null, item.size
     );
 
 
@@ -2271,7 +2332,8 @@ function drawProcessedLogo(
 
   const drawX =
     frame.center -
-    drawWidth / 2;
+    drawWidth / 2 +
+    (item.offsetX || 0) * frame.center * 2;
 
 
   const drawY =
@@ -2326,6 +2388,8 @@ function drawLogoBorder(
   size,
   frame
 ) {
+
+  if (frame.ringThickness <= 0) return;
 
   ctx.save();
 
@@ -2508,6 +2572,9 @@ async function commitItem(
   item
 ) {
 
+  if (item.bgChangePromise) await item.bgChangePromise;
+  if (item.commitPromise) return item.commitPromise;
+
   if (
     !item.dirty &&
     item.blob
@@ -2531,6 +2598,8 @@ async function commitItem(
     (
       async () => {
 
+        do {
+        item.dirty = false;
         const canvas =
           document.createElement(
             "canvas"
@@ -2558,11 +2627,9 @@ async function commitItem(
           blob.size;
 
 
-        item.dirty =
-          false;
+        } while (item.dirty);
 
-
-        return blob;
+        return item.blob;
 
       }
     )();
@@ -2571,6 +2638,11 @@ async function commitItem(
   try {
 
     return await item.commitPromise;
+
+  } catch (error) {
+
+    item.dirty = true;
+    throw error;
 
   } finally {
 
@@ -2753,6 +2825,136 @@ function updateCardBackgroundButtons(
 }
 
 
+// Horizontal position is a fraction of the output width, independent of zoom.
+function setHorizontalPosition(item, percent, card) {
+  percent = clampNumber(Math.round(percent), -50, 50, 0);
+  item.offsetX = percent / 100;
+  item.dirty = true;
+  card.querySelector('.position-range').value = percent;
+  card.querySelector('.position-value').textContent =
+    percent === 0 ? 'Giữa' : (percent < 0 ? 'Trái ' : 'Phải ') + Math.abs(percent) + '%';
+  schedulePreview(item, card.querySelector('.preview-canvas'));
+}
+
+function setupWheelZoom(canvas, item, card) {
+  let saveTimer = null;
+  canvas.title = 'Lăn chuột để phóng to/thu nhỏ; kéo để dịch trái/phải';
+  canvas.addEventListener('wheel', event => {
+    if (!event.deltaY || event.ctrlKey || event.metaKey) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setZoom(item, item.zoom * 100 + (event.deltaY < 0 ? 5 : -5), card);
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      if (!card.isConnected) return;
+      try {
+        await commitItem(item);
+        updateCardOutputSize(card, item);
+      } catch (error) {
+        console.error('Không thể cập nhật zoom:', error);
+      }
+    }, 150);
+  }, {passive:false});
+}
+
+function setupHorizontalMovement(canvas, item, card) {
+  let drag = null;
+  canvas.onpointerdown = event => {
+    if (event.button !== 0 || drag) return;
+    event.preventDefault();
+    event.stopPropagation();
+    drag = {id: event.pointerId, x: event.clientX, offset: item.offsetX || 0,
+      width: canvas.getBoundingClientRect().width};
+    card.draggable = false;
+    canvas.classList.add('position-dragging');
+    canvas.setPointerCapture(event.pointerId);
+  };
+  canvas.onpointermove = event => {
+    if (!drag || drag.id !== event.pointerId) return;
+    setHorizontalPosition(item,
+      (drag.offset + (event.clientX - drag.x) / drag.width) * 100, card);
+  };
+  const finish = async event => {
+    if (!drag || drag.id !== event.pointerId) return;
+    drag = null;
+    card.draggable = true;
+    canvas.classList.remove('position-dragging');
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+    try { await commitItem(item); updateCardOutputSize(card, item); }
+    catch (error) { console.error(error); alert('Không thể cập nhật ảnh: ' + error.message); }
+  };
+  canvas.onpointerup = finish;
+  canvas.onpointercancel = finish;
+  canvas.onlostpointercapture = finish;
+  const slider = card.querySelector('.position-range');
+  slider.onpointerdown = event => {event.stopPropagation(); card.draggable = false;};
+  slider.oninput = () => setHorizontalPosition(item, Number(slider.value), card);
+  slider.onchange = async () => {
+    card.draggable = true;
+    await commitItem(item);
+    updateCardOutputSize(card, item);
+  };
+  slider.onpointerup = slider.onpointercancel = () => {card.draggable = true;};
+  card.querySelector('.position-center').onclick = async event => {
+    event.stopPropagation();
+    setHorizontalPosition(item, 0, card);
+    await commitItem(item);
+    updateCardOutputSize(card, item);
+  };
+}
+
+function setupPreviewBackgroundRemoval(item, card) {
+  const buttons = [...card.querySelectorAll('.remove-bg-toggle')];
+  const update = () => {
+    for (const button of buttons) {
+      const active = (button.dataset.removeBg === 'on') === item.removeBg;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    }
+    card.querySelector('.remove-bg-value').textContent = item.removeBg ? 'Bật' : 'Tắt';
+    card.querySelector('.cut-badge').style.display = item.removeBg ? 'inline-block' : 'none';
+  };
+  update();
+  for (const button of buttons) button.onclick = async event => {
+    event.stopPropagation();
+    if (item.bgChangePromise) return;
+    const removeBg = button.dataset.removeBg === 'on';
+    buttons.forEach(b => { b.disabled = true; });
+    card.querySelector('.preview-bg-status').textContent = 'Đang cập nhật…';
+    const work = (async () => {
+      // Always rebuild from the uploaded original, so toggling never erodes pixels.
+      const image = await readImageFile(item.sourceFile);
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width; canvas.height = image.height;
+      canvas.getContext('2d', {willReadFrequently:true}).drawImage(image, 0, 0);
+      const threshold = clampNumber(parseInt(thresholdInput.value, 10), 10, 120, 42);
+      const feather = clampNumber(parseInt(featherInput.value, 10), 0, 30, 8);
+      if (removeBg) removeBackgroundFromCanvas(canvas, threshold, feather);
+      const bounds = detectForegroundBounds(canvas, threshold, removeBg);
+      const tone = analyzeLogoTone(canvas, bounds, threshold, removeBg);
+      if (item.commitPromise) await item.commitPromise;
+      Object.assign(item, {sourceCanvas:canvas, removeBg, threshold, bounds, tone,
+        automaticLogoBackground:tone.kind === 'dark' ? '#ffffff' : '#000000'});
+      setBackgroundMode(item, item.logoBackgroundMode, card);
+      update();
+      updateSummary();
+    })();
+    item.bgChangePromise = work;
+    try {
+      await work;
+      item.bgChangePromise = null;
+      await commitItem(item);
+      updateCardOutputSize(card, item);
+      card.querySelector('.preview-bg-status').textContent = removeBg ? 'Đã tách nền logo này.' : 'Đã khôi phục nền gốc.';
+    } catch (error) {
+      card.querySelector('.preview-bg-status').textContent = 'Không cập nhật được: ' + error.message;
+    } finally {
+      item.bgChangePromise = null;
+      buttons.forEach(b => { b.disabled = false; });
+    }
+  };
+}
+
 function setupResizeHandle(
   handle,
   item,
@@ -2922,6 +3124,12 @@ function addCard(
 
 
     <div class="editor">
+      <div class="bg-title">TÁCH NỀN</div>
+      <div class="zoom-actions remove-bg-actions">
+        <button type="button" class="remove-bg-toggle remove-bg-on" data-remove-bg="on">TÁCH NỀN</button>
+        <button type="button" class="remove-bg-toggle remove-bg-off" data-remove-bg="off">KHÔNG TÁCH NỀN</button>
+      </div>
+      <div class="zoom-help preview-bg-status" role="status"></div>
 
       <div class="zoom-head">
 
@@ -2990,6 +3198,19 @@ function addCard(
       </div>
 
 
+      <section class="advanced-controls" aria-label="Vị trí và màu nền">
+      <div class="zoom-head">
+        <span>VỊ TRÍ TRÁI / PHẢI</span>
+        <span class="position-value">Giữa</span>
+      </div>
+      <input class="position-range" type="range" min="-50" max="50" step="1"
+        value="${Math.round((item.offsetX || 0) * 100)}" aria-label="Vị trí trái phải của logo">
+      <div class="zoom-actions">
+        <button type="button" class="position-center">Về giữa</button>
+      </div>
+      <div class="zoom-help">Kéo trực tiếp logo sang trái/phải hoặc dùng thanh chỉnh vị trí.
+        Để đổi thứ tự ảnh, kéo phần tên hoặc thông tin bên dưới.</div>
+
       <div class="bg-title">
         NỀN TRONG VIỀN
       </div>
@@ -3057,6 +3278,7 @@ function addCard(
 
       </div>
 
+      </section>
     </div>
 
 
@@ -3067,6 +3289,7 @@ function addCard(
     </div>
 
 
+    <details class="logo-details"><summary>Thông tin ảnh</summary>
     <div class="info">
 
       File:
@@ -3109,11 +3332,7 @@ function addCard(
       <br>
 
       Tách nền:
-      ${
-        item.removeBg
-          ? "Bật"
-          : "Tắt"
-      }
+      <span class="remove-bg-value">${item.removeBg ? "Bật" : "Tắt"}</span>
       <br>
 
       Nền trong viền:
@@ -3145,11 +3364,7 @@ function addCard(
         PNG
       </span>
 
-      ${
-        item.removeBg
-          ? '<span class="badge cut">Đã tách nền</span>'
-          : ''
-      }
+      <span class="badge cut cut-badge" style="display:${item.removeBg ? 'inline-block' : 'none'}">Đã tách nền</span>
 
       ${
         [
@@ -3165,12 +3380,16 @@ function addCard(
     </div>
 
 
+    </details>
+    <div class="card-downloads">
     <button
       class="download-one"
       type="button"
     >
       Tải ảnh này
     </button>
+    <button class="download-team download-one-team" type="button">Tải giữ tên team</button>
+    </div>
 
   `;
 
@@ -3191,6 +3410,11 @@ function addCard(
       ".zoom-range"
     );
 
+
+  setupPreviewBackgroundRemoval(item, card);
+  setupHorizontalMovement(canvas, item, card);
+  setupWheelZoom(canvas, item, card);
+  setHorizontalPosition(item, (item.offsetX || 0) * 100, card);
 
   renderPreview(
     item,
@@ -3421,6 +3645,14 @@ function addCard(
     };
 
 
+  card.querySelector('.download-team').onclick = async event => {
+    event.stopPropagation();
+    try {
+      await commitItem(item);
+      downloadBlob(item.blob, makeTeamOutputName(item));
+    } catch (error) { alert('Không thể tải ảnh: ' + error.message); }
+  };
+
   card.ondragstart =
     event => {
 
@@ -3430,7 +3662,7 @@ function addCard(
         ) ||
         event.target.closest(
           ".resize-handle"
-        )
+        ) || event.target.closest(".preview-canvas")
       ) {
 
         event.preventDefault();
@@ -3958,7 +4190,29 @@ async function makeOriginal1000Png(
    DOWNLOAD PROCESSED ZIP
 ========================= */
 
-async function downloadZip() {
+// Preserve uploaded team spelling and spaces; only replace invalid filename characters.
+function makeTeamOutputName(item, usedNames = new Set()) {
+  const base = String(item.originalName || item.displayTeam || 'team')
+    .replace(/\.[^/.]+$/, '').replace(/[\\/:*?"<>|\x00-\x1f]/g, '_')
+    .trim().replace(/[. ]+$/, '') || 'team';
+  let name = base + '.png';
+  let suffix = 2;
+  while (usedNames.has(name.toLowerCase())) name = base + '_' + suffix++ + '.png';
+  usedNames.add(name.toLowerCase());
+  return name;
+}
+
+$('downloadTeamsBtn').onclick = async () => {
+  const button = $('downloadTeamsBtn');
+  button.disabled = true;
+  try {
+    if (!sourceItems.length) { alert('Vui lòng thêm ảnh trước.'); return; }
+    if (!processedImages.length) await processAllImages();
+    await downloadZip(true);
+  } finally { button.disabled = false; }
+};
+
+async function downloadZip(keepTeamNames = false) {
 
   if (
     !processedImages.length
@@ -3990,12 +4244,13 @@ async function downloadZip() {
     await commitAllDirtyImages();
 
 
+    const usedTeamNames = new Set();
     const files =
       processedImages.map(
         item => ({
 
           name:
-            item.outputName,
+            keepTeamNames ? makeTeamOutputName(item, usedTeamNames) : item.outputName,
 
           blob:
             item.blob
@@ -4006,7 +4261,7 @@ async function downloadZip() {
 
     const zip =
       await createZip(
-        files
+        files, keepTeamNames
       );
 
 
@@ -4019,7 +4274,7 @@ async function downloadZip() {
 
       +
 
-      ".zip";
+      (keepTeamNames ? "_ten_team.zip" : ".zip");
 
 
     downloadBlob(
@@ -5558,7 +5813,7 @@ function analyzeLogoTone(
 ========================= */
 
 async function createZip(
-  files
+  files, preserveTeamNames = false
 ) {
 
   const encoder =
@@ -5584,7 +5839,7 @@ async function createZip(
 
     const nameBytes =
       encoder.encode(
-        sanitizeFileName(
+        preserveTeamNames ? String(file.name).replace(/[\\/:*?"<>|\x00-\x1f]/g, "_") : sanitizeFileName(
           file.name
         )
       );
@@ -6561,5 +6816,6 @@ renderMappingTable();
 
 </script>
 
+<script src="drive-import.js"></script>
 </body>
 </html>
