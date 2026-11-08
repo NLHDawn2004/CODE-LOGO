@@ -2,7 +2,10 @@
 const http = require('node:http');
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const HOST = '127.0.0.1:18764';
+const renderUrl = process.env.RENDER_EXTERNAL_URL;
+const port = renderUrl ? Number(process.env.PORT || 10000) : 18764;
+const bindAddress = renderUrl ? '0.0.0.0' : '127.0.0.1';
+const appUrl = new URL(renderUrl || 'http://127.0.0.1:18764');
 const assets = new Map([['/','index.html'],['/index.html','index.html'],['/drive-import.js','drive-import.js']]);
 async function downloadPublicImage(id, resourceKey, signal, fetchImpl, maxBytes = 30 * 1024 * 1024) {
   let url = new URL('https://drive.usercontent.google.com/download');
@@ -46,11 +49,14 @@ function createServer({fetchImpl = fetch} = {}) {
     res.setHeader('Cache-Control','no-store');
     res.setHeader('X-Content-Type-Options','nosniff');
     res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
-    if(req.headers.host !== HOST || (req.headers.origin && req.headers.origin !== 'http://' + HOST)) {
+    if(req.headers.host !== appUrl.host || (req.headers.origin && req.headers.origin !== appUrl.origin)) {
       res.writeHead(403);res.end('Forbidden');return;
     }
-    if(req.method !== 'GET') {res.writeHead(405);res.end();return;}
-    const url = new URL(req.url,'http://' + HOST);
+    const url = new URL(req.url,appUrl);
+    const asset = assets.get(url.pathname);
+    if(req.method !== 'GET' && !(renderUrl && req.method === 'HEAD' && asset)) {
+      res.writeHead(405);res.end();return;
+    }
     if(url.pathname === '/api/drive/image') {
       const id = url.searchParams.get('id') || '';
       const resourceKey = url.searchParams.get('resourcekey') || '';
@@ -75,14 +81,15 @@ function createServer({fetchImpl = fetch} = {}) {
         res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify({app:'HD CODE LOGO',drive:true}));return;
       }
       if(url.pathname === '/api/drive-config') {
-        let apiKey = '';
-        try {
-          const settings = JSON.parse((await fs.readFile(path.join(__dirname,'drive-settings.json'),'utf8')).replace(/^\uFEFF/,''));
-          apiKey = typeof settings.apiKey === 'string' ? settings.apiKey : '';
-        } catch {}
+        let apiKey = process.env.GOOGLE_DRIVE_BROWSER_API_KEY || '';
+        if(!renderUrl) {
+          try {
+            const settings = JSON.parse((await fs.readFile(path.join(__dirname,'drive-settings.json'),'utf8')).replace(/^\uFEFF/,''));
+            apiKey = typeof settings.apiKey === 'string' ? settings.apiKey : '';
+          } catch {}
+        }
         res.writeHead(200,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify({apiKey}));return;
       }
-      const asset = assets.get(url.pathname);
       if(!asset) {res.writeHead(404);res.end('Not found');return;}
       const body = await fs.readFile(path.join(__dirname,asset));
       res.writeHead(200,{'Content-Type':asset.endsWith('.js')?'text/javascript; charset=utf-8':'text/html; charset=utf-8'});
@@ -94,7 +101,11 @@ function createServer({fetchImpl = fetch} = {}) {
 }
 if(require.main === module) {
   const server = createServer();
-  server.on('error',error=>{if(error.code!=='EADDRINUSE')console.error(error.message);process.exit(error.code==='EADDRINUSE'?0:1);});
-  server.listen(18764,'127.0.0.1',()=>console.log('HD CODE LOGO: http://' + HOST));
+  server.on('error',error=>{
+    if(!renderUrl && error.code === 'EADDRINUSE') process.exit(0);
+    console.error(error.message);
+    process.exit(1);
+  });
+  server.listen(port,bindAddress,()=>console.log('HD CODE LOGO: ' + appUrl.origin));
 }
 module.exports = {createServer, downloadPublicImage};
