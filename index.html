@@ -485,9 +485,9 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
-    .preview-canvas { cursor: ew-resize; touch-action: none; user-select: none; }
+    .preview-canvas { cursor: move; touch-action: none; user-select: none; }
     .preview-canvas.position-dragging { cursor: grabbing; }
-    .position-range { width: 100%; margin: 10px 0; }
+    .position-range, .vertical-range { width: 100%; margin: 10px 0; }
     .download-one-team { width: 100%; margin-top: 8px; background: #285b79; }
 
     .drive-panel { margin: 20px 0; padding: 18px; border: 1px solid #365653; border-radius: 16px; background: #131e1c; }
@@ -2035,6 +2035,7 @@ async function createProcessedItem({
     borderWidth: 40,
 
     offsetX: 0,
+    offsetY: 0,
 
     zoom:
       1,
@@ -2338,7 +2339,8 @@ function drawProcessedLogo(
 
   const drawY =
     frame.center -
-    drawHeight / 2;
+    drawHeight / 2 +
+    (item.offsetY || 0) * frame.center * 2;
 
 
   ctx.save();
@@ -2836,9 +2838,19 @@ function setHorizontalPosition(item, percent, card) {
   schedulePreview(item, card.querySelector('.preview-canvas'));
 }
 
+function setVerticalPosition(item, percent, card) {
+  percent = clampNumber(Math.round(percent), -50, 50, 0);
+  item.offsetY = percent / 100;
+  item.dirty = true;
+  card.querySelector('.vertical-range').value = percent;
+  card.querySelector('.vertical-value').textContent =
+    percent === 0 ? 'Giữa' : (percent < 0 ? 'Lên ' : 'Xuống ') + Math.abs(percent) + '%';
+  schedulePreview(item, card.querySelector('.preview-canvas'));
+}
+
 function setupWheelZoom(canvas, item, card) {
   let saveTimer = null;
-  canvas.title = 'Lăn chuột để phóng to/thu nhỏ; kéo để dịch trái/phải';
+  canvas.title = 'Lăn chuột để phóng to/thu nhỏ; kéo để dịch lên/xuống, trái/phải';
   canvas.addEventListener('wheel', event => {
     if (!event.deltaY || event.ctrlKey || event.metaKey) return;
     event.preventDefault();
@@ -2863,8 +2875,10 @@ function setupHorizontalMovement(canvas, item, card) {
     if (event.button !== 0 || drag) return;
     event.preventDefault();
     event.stopPropagation();
-    drag = {id: event.pointerId, x: event.clientX, offset: item.offsetX || 0,
-      width: canvas.getBoundingClientRect().width};
+    const rect = canvas.getBoundingClientRect();
+    drag = {id: event.pointerId, x: event.clientX, y: event.clientY,
+      offset: item.offsetX || 0, offsetY: item.offsetY || 0,
+      width: rect.width, height: rect.height};
     card.draggable = false;
     canvas.classList.add('position-dragging');
     canvas.setPointerCapture(event.pointerId);
@@ -2873,6 +2887,8 @@ function setupHorizontalMovement(canvas, item, card) {
     if (!drag || drag.id !== event.pointerId) return;
     setHorizontalPosition(item,
       (drag.offset + (event.clientX - drag.x) / drag.width) * 100, card);
+    setVerticalPosition(item,
+      (drag.offsetY + (event.clientY - drag.y) / drag.height) * 100, card);
   };
   const finish = async event => {
     if (!drag || drag.id !== event.pointerId) return;
@@ -2886,18 +2902,23 @@ function setupHorizontalMovement(canvas, item, card) {
   canvas.onpointerup = finish;
   canvas.onpointercancel = finish;
   canvas.onlostpointercapture = finish;
-  const slider = card.querySelector('.position-range');
+  for (const [selector, setPosition] of [
+    ['.position-range', setHorizontalPosition], ['.vertical-range', setVerticalPosition]
+  ]) {
+  const slider = card.querySelector(selector);
   slider.onpointerdown = event => {event.stopPropagation(); card.draggable = false;};
-  slider.oninput = () => setHorizontalPosition(item, Number(slider.value), card);
+  slider.oninput = () => setPosition(item, Number(slider.value), card);
   slider.onchange = async () => {
     card.draggable = true;
     await commitItem(item);
     updateCardOutputSize(card, item);
   };
   slider.onpointerup = slider.onpointercancel = () => {card.draggable = true;};
+  }
   card.querySelector('.position-center').onclick = async event => {
     event.stopPropagation();
     setHorizontalPosition(item, 0, card);
+    setVerticalPosition(item, 0, card);
     await commitItem(item);
     updateCardOutputSize(card, item);
   };
@@ -3205,10 +3226,16 @@ function addCard(
       </div>
       <input class="position-range" type="range" min="-50" max="50" step="1"
         value="${Math.round((item.offsetX || 0) * 100)}" aria-label="Vị trí trái phải của logo">
+      <div class="zoom-head">
+        <span>VỊ TRÍ LÊN / XUỐNG</span>
+        <span class="vertical-value">Giữa</span>
+      </div>
+      <input class="vertical-range" type="range" min="-50" max="50" step="1"
+        value="${Math.round((item.offsetY || 0) * 100)}" aria-label="Vị trí lên xuống của logo">
       <div class="zoom-actions">
         <button type="button" class="position-center">Về giữa</button>
       </div>
-      <div class="zoom-help">Kéo trực tiếp logo sang trái/phải hoặc dùng thanh chỉnh vị trí.
+      <div class="zoom-help">Kéo trực tiếp logo lên/xuống, trái/phải hoặc dùng thanh chỉnh vị trí.
         Để đổi thứ tự ảnh, kéo phần tên hoặc thông tin bên dưới.</div>
 
       <div class="bg-title">
@@ -3415,6 +3442,7 @@ function addCard(
   setupHorizontalMovement(canvas, item, card);
   setupWheelZoom(canvas, item, card);
   setHorizontalPosition(item, (item.offsetX || 0) * 100, card);
+  setVerticalPosition(item, (item.offsetY || 0) * 100, card);
 
   renderPreview(
     item,
